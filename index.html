@@ -1,0 +1,2417 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>卫生专业技术资格考试 - 真题模拟</title>
+    <style>
+      :root {
+        --primary-dark: #004a7c;
+        --primary-light: #8fb3d3;
+        --secondary: #e67e22;
+        --bg-light: #f4f7f9;
+        --sidebar-bg: #d9e8f5;
+        --border-color: #b5c9d9;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Microsoft YaHei", sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background-color: var(--bg-light);
+      }
+
+      /* Header Styles */
+      header {
+        background-color: var(--primary-dark);
+        color: white;
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+
+      .header-top {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .header-info {
+        display: flex;
+        gap: 20px;
+      }
+
+      .seat-box {
+        background-color: #94b70b;
+        padding: 2px 15px;
+        font-weight: bold;
+        color: #000;
+      }
+
+      /* Main Content Layout */
+      main {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+      }
+
+      .question-area {
+        flex: 1;
+        padding: 30px;
+        background-color: white;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 300px;
+        background-color: var(--sidebar-bg);
+        border-left: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+
+      /* Sidebar Navigation Grid */
+      .sidebar-legend {
+        padding: 10px;
+        display: flex;
+        gap: 15px;
+        font-size: 12px;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .legend-box {
+        width: 15px;
+        height: 15px;
+        border: 1px solid #999;
+      }
+
+      .legend-box.answered {
+        background-color: #7a9cb5;
+      }
+      .legend-box.current {
+        background-color: var(--secondary);
+      }
+      .legend-box.unanswered {
+        background-color: #fff;
+      }
+
+      .nav-section {
+        padding: 10px;
+      }
+
+      .section-title {
+        background-color: #5c93c4;
+        color: white;
+        padding: 5px 10px;
+        font-size: 13px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .nav-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 5px;
+        margin-bottom: 15px;
+      }
+
+      .nav-item {
+        aspect-ratio: 1;
+        background-color: white;
+        border: 1px solid #b5c9d9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        cursor: pointer;
+      }
+
+      .nav-item.current {
+        background-color: var(--secondary);
+        color: white;
+        border-color: var(--secondary);
+      }
+      .nav-item.answered {
+        background-color: #7a9cb5;
+        color: white;
+      }
+      .nav-item.wrong {
+        background-color: #ff4d4f;
+        color: white;
+      }
+
+      /* Question Display */
+      .q-header {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 18px;
+      }
+
+      .q-num {
+        color: var(--primary-dark);
+        font-weight: bold;
+        white-space: nowrap;
+      }
+
+      .q-text {
+        line-height: 1.6;
+        background-color: #e6f3ff;
+        padding: 15px;
+        border-radius: 4px;
+        width: 100%;
+      }
+
+      .options-list {
+        list-style: none;
+        margin-top: 20px;
+      }
+
+      .option-item {
+        margin-bottom: 15px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        cursor: pointer;
+        padding: 8px;
+        transition: background 0.2s;
+      }
+
+      .option-item:hover {
+        background-color: #f0f7ff;
+      }
+
+      .option-item.selected {
+        background-color: #e1f0ff;
+      }
+
+      .option-input {
+        margin-top: 4px;
+      }
+
+      .option-label {
+        font-size: 16px;
+        line-height: 1.4;
+      }
+
+      /* Result Info */
+      .result-box {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 4px;
+        display: none;
+      }
+
+      .result-box.show {
+        display: block;
+      }
+      .result-box.wrong {
+        background-color: #fff1f0;
+        border: 1px solid #ffa39e;
+      }
+      .result-box.correct {
+        background-color: #f6ffed;
+        border: 1px solid #b7eb8f;
+      }
+
+      .reason-text {
+        margin-top: 10px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      /* Footer Styles */
+      footer {
+        background-color: var(--primary-light);
+        border-top: 1px solid var(--border-color);
+      }
+
+      .footer-nav {
+        display: flex;
+        padding: 10px 20px;
+        gap: 10px;
+      }
+
+      .btn {
+        padding: 8px 20px;
+        border: 1px solid var(--primary-dark);
+        background-color: #fefefe;
+        color: var(--primary-dark);
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 4px;
+      }
+
+      .btn:hover {
+        background-color: #f0f0f0;
+      }
+      .btn.primary {
+        background-color: #94b70b;
+        border-color: #94b70b;
+        color: #000;
+        font-weight: bold;
+      }
+
+      .footer-status {
+        background-color: var(--primary-dark);
+        color: white;
+        padding: 5px 20px;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .status-left {
+        display: flex;
+        gap: 20px;
+      }
+      .status-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .progress-container {
+        width: 200px;
+        height: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: #94b70b;
+        width: 0%;
+        transition: width 0.3s;
+      }
+
+      /* Modal for Results */
+      #scoreModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        text-align: center;
+        min-width: 300px;
+      }
+
+      .modal-score {
+        font-size: 48px;
+        color: var(--secondary);
+        margin: 20px 0;
+      }
+
+      /* Calculator Styles */
+      #calcModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        justify-content: center;
+        align-items: center;
+        z-index: 1001;
+      }
+      .calc-container {
+        background: #f0f0f0;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        width: 260px;
+        border: 1px solid #ccc;
+      }
+      .calc-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+      }
+      .calc-close {
+        cursor: pointer;
+        color: #666;
+      }
+      .calc-display {
+        background: #fff;
+        border: 1px solid #bbb;
+        padding: 10px;
+        text-align: right;
+        font-size: 20px;
+        margin-bottom: 10px;
+        height: 45px;
+        overflow: hidden;
+        border-radius: 4px;
+      }
+      .calc-buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+      }
+      .calc-btn {
+        padding: 12px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 4px;
+        font-weight: bold;
+      }
+      .calc-btn:hover {
+        background: #e0e0e0;
+      }
+      .calc-btn.op {
+        background: #f9f9f9;
+        color: var(--primary-dark);
+      }
+      .calc-btn.eq {
+        background: var(--secondary);
+        color: white;
+        grid-column: span 2;
+      }
+      .calc-btn.clear {
+        color: #ff4d4f;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-top">
+        <div class="header-info">
+          <span>当前试室：第一试室</span>
+          <span>当前场次：第01场</span>
+        </div>
+        <div class="seat-box">座位号：1</div>
+      </div>
+      <div class="header-info">
+        <span>姓名：智爹的好大儿--赵鑫</span>
+        <span>性别：男</span>
+        <span>准考证号：1001</span>
+        <span>报考专业：普通外科学中级</span>
+      </div>
+    </header>
+
+    <main>
+      <div class="question-area" id="questionArea">
+        <div class="q-header">
+          <div class="q-num" id="questionNum">第1题</div>
+          <div class="q-text" id="questionText">正在加载题目...</div>
+        </div>
+        <ul class="options-list" id="optionsList">
+          <!-- Options will be loaded here -->
+        </ul>
+        <div class="result-box" id="resultBox">
+          <div id="correctAnswer"></div>
+          <div class="reason-text" id="reasonText"></div>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <div class="sidebar-legend">
+          <div class="legend-item">
+            <div class="legend-box answered"></div>
+            已答
+          </div>
+          <div class="legend-item">
+            <div class="legend-box current"></div>
+            在答
+          </div>
+          <div class="legend-item">
+            <div class="legend-box unanswered"></div>
+            未答
+          </div>
+        </div>
+
+        <div class="nav-section" id="navSections">
+          <!-- Sections like 单选题, 多选题 will be loaded here -->
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      <div class="footer-nav">
+        <button class="btn" id="prevBtn">上一题 (←)</button>
+        <button class="btn" id="nextBtn">下一题 (→)</button>
+        <button class="btn" onclick="toggleCalc()">计算器 (2)</button>
+        <button class="btn">帮助 (3)</button>
+        <button class="btn primary" id="submitBtn">交卷 (4)</button>
+      </div>
+      <div class="footer-status">
+        <div class="status-left">
+          <span id="totalTime">考试总时间：90 分钟</span>
+          <span id="timeLeft">剩余时间：90 分钟</span>
+        </div>
+        <div class="status-right">
+          <span id="totalCount">总题数 0</span>
+          <span id="answeredCount">已答 0 题</span>
+          <span>答题进度</span>
+          <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <span id="progressText">0%</span>
+        </div>
+      </div>
+    </footer>
+
+    <div id="scoreModal">
+      <div class="modal-content">
+        <h2>考试结束</h2>
+        <p>您的最终得分是：</p>
+        <div class="modal-score" id="finalScore">0</div>
+        <button class="btn primary" onclick="closeModal()">查看错题解析</button>
+      </div>
+    </div>
+
+    <!-- Calculator Modal -->
+    <div id="calcModal">
+      <div class="calc-container">
+        <div class="calc-header">
+          <span>计算器</span>
+          <span class="calc-close" onclick="toggleCalc()">✖</span>
+        </div>
+        <div class="calc-display" id="calcDisplay">0</div>
+        <div class="calc-buttons">
+          <div class="calc-btn clear" onclick="calcClear()">C</div>
+          <div class="calc-btn op" onclick="calcInput('/')">/</div>
+          <div class="calc-btn op" onclick="calcInput('*')">*</div>
+          <div class="calc-btn op" onclick="calcInput('-')">-</div>
+          <div class="calc-btn" onclick="calcInput('7')">7</div>
+          <div class="calc-btn" onclick="calcInput('8')">8</div>
+          <div class="calc-btn" onclick="calcInput('9')">9</div>
+          <div class="calc-btn op" onclick="calcInput('+')">+</div>
+          <div class="calc-btn" onclick="calcInput('4')">4</div>
+          <div class="calc-btn" onclick="calcInput('5')">5</div>
+          <div class="calc-btn" onclick="calcInput('6')">6</div>
+          <div class="calc-btn" onclick="calcInput('.')">.</div>
+          <div class="calc-btn" onclick="calcInput('1')">1</div>
+          <div class="calc-btn" onclick="calcInput('2')">2</div>
+          <div class="calc-btn" onclick="calcInput('3')">3</div>
+          <div class="calc-btn" onclick="calcInput('0')">0</div>
+          <div class="calc-btn eq" onclick="calcEqual()">=</div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const questions = [
+        {
+          id: 1,
+          title: "基础知识",
+          text: "收缩压 90mmHg，神志尚清，此时失血量最可能为",
+          options: [
+            "A. 400～800",
+            "B. 800～1600",
+            "C. >1600",
+            "D. 400～200",
+            "E. 200～100",
+          ],
+          answer: "B",
+          type: "single",
+          reason:
+            "解析：一般来说，成人失血量达800～1600mL时，会出现收缩压90mmHg左右等表现，同时神志可尚清。失血量400～800mL时症状相对较轻，收缩压多正常。失血量>1600mL症状会更严重。而D、E选项范围不符合临床实际失血表现与血压对应情况，所以选B。",
+        },
+        {
+          id: 2,
+          text: "男，60岁。因骨折致损伤性休克，血压 90/70mmHg，中心静脉压 10cmH₂O，在10分钟内经静脉输入等渗盐水 250mL 后，测中心静脉压为 10cmH₂O，血压 100/80mmHg，此时，最佳治疗方案是",
+          options: [
+            "A. 应用血管收缩剂",
+            "B. 应用血管扩张剂",
+            "C. 应用皮质类固醇",
+            "D. 补充血容量",
+            "E. 应用强心剂",
+          ],
+          answer: "D",
+          type: "single",
+          reason:
+            "解析：患者血压低，中心静脉压正常，补液后血压上升，中心静脉压不变，提示血容量不足，应继续补充血容量，而非用血管收缩剂、扩张剂、强心剂或皮质类固醇，所以选D。",
+        },
+        {
+          id: 3,
+          text: "关于感染性休克，下列不正确的是",
+          options: [
+            "A. 通常由金黄色葡萄球菌感染引起",
+            "B. 治疗较低血容量休克困难",
+            "C. 常伴 SIRS",
+            "D. 皮肤可以潮红",
+            "E. 脉压可以>30mmHg",
+          ],
+          answer: "A",
+          type: "single",
+          reason:
+            "解析：感染性休克常由革兰阴性杆菌等引起，而非通常由金黄色葡萄球菌感染引起，其治疗较困难，常伴SIRS，皮肤可潮红，脉压可>30mmHg，故A不正确。",
+        },
+        {
+          id: 4,
+          text: "急性肾衰的突出临床表现",
+          options: [
+            "A. 尿急，尿痛",
+            "B. 血中尿素氮进行性升高",
+            "C. 排尿困难或突然无尿",
+            "D. 尿量明显减少",
+            "E. 尿量明显增多",
+          ],
+          answer: "D",
+          type: "single",
+          reason:
+            "解析：尿量明显减少为急性肾衰竭的突出表现。尿量明显增多不一定与肾脏有关，如输液过多，利尿剂的应用等均可使尿量增加。另外，急性肾衰的多尿期一般发生在少尿期后，不能作为突出临床表现。排尿困难或突然无尿可能与尿路梗阻有关，不说明肾衰。尿急尿痛是尿路感染的表现。急性肾衰时不但血中尿素氮升高，肌酐也进行性增高。单纯尿素氮增加不能说明存在肾衰。",
+        },
+        {
+          id: 5,
+          text: "下列哪一项不是导致多器官功能障碍综合征（MODS）的常见原因",
+          options: [
+            "A. 出血坏死性胰腺炎",
+            "B. 休克",
+            "C. 大面积烧伤",
+            "D. 慢性胆囊炎",
+            "E. 绞窄性肠梗阻",
+          ],
+          answer: "D",
+          type: "single",
+          reason:
+            "解析：MODS常见于急性重症疾病或情况，例如创伤、烧伤、大手术、严重的脓毒血症、休克或心搏与呼吸骤停复苏后以及急性出血坏死型胰腺炎、绞窄性肠梗阻等。值得注意的是，慢性胆囊炎并非急性重症疾病，因此不会导致MODS的发生。",
+        },
+        {
+          id: 6,
+          text: "ARDS患者诊断标准中，氧合指数（PaO₂/FiO₂）应为",
+          options: [
+            "A. ≤150mmHg",
+            "B. ≥200mmHg",
+            "C. ≤200mmHg",
+            "D. ≤300mmHg",
+            "E. ≥300mmHg",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：急性肺损伤（ALI）时氧合指数（PaO₂/FiO₂）≤300mmHg；急性呼吸窘迫综合征（ARDS）时氧合指数（PaO₂/FiO₂）≤200mmHg。",
+        },
+        {
+          id: 7,
+          text: "为减少局麻药的吸收，常添加肾上腺素，浓度为",
+          options: [
+            "A. 1:2000000",
+            "B. 1:200000",
+            "C. 1:20000",
+            "D. 1:2000",
+            "E. 1:500000",
+          ],
+          answer: "B",
+          type: "single",
+          reason:
+            "解析：局麻药中加入小剂量肾上腺素可减少局麻药吸收，降低血中局麻药浓度，降低局麻药中毒概率，肾上腺素浓度不宜过高，一般在1:20万～40万。必须注意身体末端部位需要局麻时（手指、脚趾和阴茎部等处），禁用肾上腺素，以防组织坏死。合并冠心病、高血压、甲亢和糖尿病等患者应慎用或不用。",
+        },
+        {
+          id: 8,
+          text: "下列部位中，局麻药中可以加入肾上腺素的是",
+          options: [
+            "A. 手指",
+            "B. 脚趾",
+            "C. 头皮",
+            "D. 阴茎",
+            "E. 以上都不是",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：在末梢动脉部位，如手指、脚趾、阴茎等处、不能加肾上腺素，以防引起组织坏死。",
+        },
+        {
+          id: 9,
+          text: "局麻药的麻醉效能主要决定于",
+          options: [
+            "A. pKa（离解常数）",
+            "B. 相对分子质量",
+            "C. 浓度",
+            "D. 脂溶性（分配系数）",
+            "E. 蛋白结合",
+          ],
+          answer: "D",
+          type: "single",
+          reason:
+            "解析：局麻药的麻醉效能主要决定于麻醉药的脂溶性（分配系数），脂溶性高的麻醉药，弥散性能好，麻醉效能强。",
+        },
+        {
+          id: 10,
+          text: "以下影响硬膜外麻醉平面的因素中最不重要的为",
+          options: [
+            "A. 药物容积",
+            "B. 注药方式",
+            "C. 病人体位",
+            "D. 穿刺间隙",
+            "E. 导管方向",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：影响麻醉平面的主要因素是：局麻药的容积，穿刺间隙，导管方向和注药方式，病人情况（如老年，妊娠等）等。其他如药液浓度，注药速度和病人体位等也有一定的影响，但不是重要因素。",
+        },
+        {
+          id: 11,
+          text: "(11~12 题共用备选答案) 病人男性，50岁，因胰十二指肠切除而并发肠瘘，每日消化液丢失约10000mL。近日病人出现腹胀、恶心和呕吐，四肢无力。腱反射消失，肠鸣音减弱",
+          options: [
+            "A. 低钾血症",
+            "B. 高钾血症",
+            "C. 低渗性缺水",
+            "D. 等渗性缺水",
+            "E. 水中毒",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "11~12",
+          reason:
+            "解析：消化道瘘导致水和电解质的丢失，出现了一系列症状。病人的腹部感到胀满，并伴有恶心和呕吐，同时四肢无力，腱反射消失，肠鸣音减弱等症状，是典型的低钾临床表现。",
+        },
+        {
+          id: 12,
+          text: "病人男性，65岁，腹部阵发性绞痛3天，并恶心呕吐，同时肛门停止排便排气，尿量少，但无明显口渴。诊断为急性肠梗阻。入院检查，眼窝凹陷，皮肤干燥，脉搏细速，BP：90/60mmHg，下列酸碱平衡失调可出现",
+          options: [
+            "A. 低钾血症",
+            "B. 高钾血症",
+            "C. 低渗性缺水",
+            "D. 等渗性缺水",
+            "E. 水中毒",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "11~12",
+          reason:
+            "解析：恶性肿瘤骨转移时可出现高钙血症，并出现诸如厌食、恶心、呕吐、口渴和多尿等临床表现。急性肠梗阻时，由于恶心、呕吐以及大量等渗性的消化液积聚在扩张的肠腔内，从而产生急性缺水，多为等渗性缺水。病人尿量少，但多无明显口渴。往往有眼窝凹陷、皮肤干燥、脉搏细速、血压下降等体征。",
+        },
+        {
+          id: 13,
+          text: "(13~16 题共用备选答案) 疖的致病菌是",
+          options: [
+            "A. 金黄色葡萄球菌",
+            "B. 乙型溶血性链球菌",
+            "C. 大肠杆菌",
+            "D. 绿脓杆菌",
+            "E. 变形杆菌",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "13-16",
+          reason:
+            "解析：疗俗称疗疮，是单个毛囊及其周围组织的急性细菌性化脓性炎症。大多为金黄色葡萄球菌感染，偶可因表皮葡萄球菌或其他病菌致病。",
+        },
+        {
+          id: 14,
+          text: "痈的常见致病菌是",
+          options: [
+            "A. 金黄色葡萄球菌",
+            "B. 乙型溶血性链球菌",
+            "C. 大肠杆菌",
+            "D. 绿脓杆菌",
+            "E. 变形杆菌",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "13-16",
+          reason:
+            '解析：病的病因与疗相似，多由金黄色葡萄球菌感染所致。其病变是多个相邻毛囊及其周围组织同时发生急性细菌性化脓性炎症，也可由多个疗融合而成。中医称其为"疽"。',
+        },
+        {
+          id: 15,
+          text: "急性蜂窝织炎的致病菌主要是",
+          options: [
+            "A. 金黄色葡萄球菌",
+            "B. 乙型溶血性链球菌",
+            "C. 大肠杆菌",
+            "D. 绿脓杆菌",
+            "E. 变形杆菌",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "13-16",
+          reason:
+            "解析：急性蜂窝织炎是指发生在皮下、筋膜下、肌间隙或深部蜂窝组织的急性细菌感染的化脓性炎症。致病菌主要是溶血性链球菌，其次为金黄色葡萄球菌、大肠埃希菌等。",
+        },
+        {
+          id: 16,
+          text: "丹毒的致病菌是",
+          options: [
+            "A. 金黄色葡萄球菌",
+            "B. 乙型溶血性链球菌",
+            "C. 大肠杆菌",
+            "D. 绿脓杆菌",
+            "E. 变形杆菌",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "13-16",
+          reason:
+            "解析：丹毒是皮肤淋巴管网的急性非化脓性炎症，致病菌多为乙型溶血性链球菌。常累及引流区淋巴结，病变蔓延较快，常有全身反应，但局部很少有组织坏死或化脓。治愈后容易复发。",
+        },
+        {
+          id: 17,
+          text: "(17~19 题共用备选答案) 耻骨联合部相当于",
+          options: ["A. T10", "B. T4", "C. T12", "D. C7~T5", "E. T2~T6"],
+          answer: "C",
+          type: "single",
+          sharedGroup: "17-19",
+          reason: "解析：耻骨联合的位置在T₁₂水平上2-3cm，因此选择答案为C。",
+        },
+        {
+          id: 18,
+          text: "胸骨柄上缘至剑突下平面相当于",
+          options: ["A. T10", "B. T4", "C. T12", "D. C7~T5", "E. T2~T6"],
+          answer: "E",
+          type: "single",
+          sharedGroup: "17-19",
+          reason:
+            "解析：根据肋骨的位置，可以得出胸骨柄的上缘对应于第二胸椎的水平位置，而剑突下缘则与第六胸椎的水平位置相当。因此，选择选项E。",
+        },
+        {
+          id: 19,
+          text: "麻醉平面达脐部时，相对应的脊神经节段是",
+          options: ["A. T10", "B. T4", "C. T12", "D. C7~T5", "E. T2~T6"],
+          answer: "A",
+          type: "single",
+          sharedGroup: "17-19",
+          reason: "解析：脐部对应的是T₁₀脊神经节段。",
+        },
+        {
+          id: 20,
+          text: "(20~22 题共用题干: 患者,女性,37 岁,60kg,于晨起后出现恶心、呕吐伴腹泻，共 10余次,感疲乏、头晕,口唇麻木；来院后查体皮肤干燥，脉搏细速、肢端湿冷，血压 100/70mmHg。)  门诊化验单显示血钠值为 134mmol/L，请估算该患者当天补钠量为多少克",
+          options: ["A. 11g", "B. 14g", "C. 23g", "D. 27g", "E. 28g"],
+          answer: "A",
+          type: "single",
+          sharedGroup: "20-22",
+          reason:
+            "解析：第1问答案A接近。应补钠总量(mmol)=[142-病人血Na⁺(mmol/L)]×体重(kg)×0.5；17mmolNa⁺=1g钠盐；因此该病人的补Na⁺量(142-134)×60×0.5=240mmol；钠盐量：240mmol/17mmol≈14g；根据临床缺钠程度估计补钠量；一般先给一半量，加上日需要量4.5g，即7+4.5=11.5g。",
+        },
+        {
+          id: 21,
+          text: "判断该患者缺钠程度应为",
+          options: [
+            "A. 不缺钠",
+            "B. 轻度缺钠",
+            "C. 中度缺钠",
+            "D. 重度缺钠",
+            "E. 特重度缺钠",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "20-22",
+          reason:
+            "解析：第2题答案B轻度缺钠：血清钠<135mmol/L(头晕)；中度缺钠：血清钠<130mmol/L（晕倒）；重度缺钠：血清钠<120mmol/L（昏迷）",
+        },
+        {
+          id: 22,
+          text: "若患者呼吸深快，二氧化碳结合力为22mmol/L，提示",
+          options: [
+            "A. 呼吸性酸中毒",
+            "B. 呼吸性碱中毒",
+            "C. 代谢性酸中毒",
+            "D. 代谢性碱中毒",
+            "E. 呼酸合并代谢性酸中毒",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "20-22",
+          reason:
+            "解析：第3题答案C患者题干患者呼吸深快，二氧化碳结合力为22mmol/L，（正常范围为22～29）考虑代谢性酸中毒可能性大。代谢性酸中毒呼吸深而快，口唇樱红。中枢神经系统改变，头痛，头晕，严重可出现昏迷。",
+        },
+        {
+          id: 23,
+          text: "(23~25 题共用题干: 女性,37 岁,行锁骨下静脉穿刺置管后 2 小时,无明显诱因突然出现呼吸困难,血压 85/70mmHg,心率 124 次/分,脉搏细弱,听诊心音遥远,检查口唇有发绀、颈静脉怒张。) 该病人最可能的诊断是",
+          options: [
+            "A. 穿刺时造成空气栓塞",
+            "B. 急性心力衰竭",
+            "C. 张力性气胸",
+            "D. 心包压塞",
+            "E. 误穿刺动脉，造成血肿压迫",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "23-25",
+          reason:
+            "解析：患者锁骨下静脉穿刺置管后2小时呼吸困难，血压下降，心率快，脉搏细弱，听诊心音遥远，检查口唇有发绀、颈静脉怒张，主要考虑手术操作时误入心包，造成心包压塞。",
+        },
+        {
+          id: 24,
+          text: "此时应首先采取的紧急抢救措施是???",
+          options: [
+            "A. 立即加快静脉输液",
+            "B. 立即停止静脉输液",
+            "C. 立即给强心药物抗心力衰竭",
+            "D. 迅速行心包腔引流",
+            "E. 立即输血，同时给升压药",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "23-25",
+          reason:
+            "解析：抢救首先应立即停止输液，避免心包积液再进一步增多，危及患者生命。",
+        },
+        {
+          id: 25,
+          text: "预防该项并发症的措施不包括以下哪一项",
+          options: [
+            "A. 经常注意 CVP 曲线是否随呼吸波动",
+            "B. 经常检查回血是否通畅",
+            "C. 管端应置于右心房内以便准确测压",
+            "D. 可用 X 线显影判断导管尖端位置",
+            "E. 导管不宜太硬",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "23-25",
+          reason:
+            "解析：预防心包压塞措施包括注意CVP曲线、检查回血、X线判断位置、用软导管等，而管端不能置于右心房内，易损伤心肌等导致心包压塞等并发症，所以选C。",
+        },
+        {
+          id: 26,
+          title: "相关专业知识",
+          text: "结肠癌最早出现下列哪项症状",
+          options: [
+            "A. 贫血",
+            "B. 腹部肿块",
+            "C. 排便习惯改变",
+            "D. 腹部隐痛",
+            "E. 肠梗阻症状",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：排便习惯改变与粪便性状的改变常为结肠癌最早出现的症状。多表现为排便次数增加、腹泻、便秘、粪便中带血、脓或黏液。",
+        },
+        {
+          id: 27,
+          text: "胆囊切除术时，以下哪项不是胆总管探查的指征",
+          options: [
+            "A. 胆总管扩张",
+            "B. 胆囊多发小结石",
+            "C. 胆囊积液",
+            "D. 黄痘病史",
+            "E. 合并胰腺炎",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：胆总管探查的指征有：有梗阻性黄疸史；胆囊多发性小结石而胆囊管通畅；术中扪及胆总管内结有结石、肿瘤或虫；术中胆道造影或术中B超显示有胆管结石；术中发现胆总管扩张；术中胆管穿刺抽出脓性胆汁或胆汁中有泥沙样颗粒。胆囊结石合并胆源性胰腺炎也应探查胆总管。",
+        },
+        {
+          id: 28,
+          text: "急性胰腺炎时，胰腺出血经腹膜后途径渗入皮下，在腰部、季肋部和下腹部皮肤出现大片青紫色淤斑的是",
+          options: [
+            "A. Cullen 征",
+            "B. Murphy 征",
+            "C. Grey-Turner 征",
+            "D. Charcot 征",
+            "E. Beck 三联征",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：急性胰腺炎时，胰腺出血经腹膜后途径渗入皮下，在腰部、季肋部和下腹部皮肤出现大片青紫色淤斑称 Grey-Turner 征，出现在脐周称 Cullen 征。",
+        },
+        {
+          id: 29,
+          text: "男性，67岁，2小时前左胸不慎被钝器撞伤，诉胸闷、胸痛、呼吸困难。体格检查：胸廓挤压征阳性，左肺呼吸音减弱，可闻及骨擦音。其可能发生的常见的并发症是",
+          options: [
+            "A. 血胸",
+            "B. 气胸",
+            "C. 反常呼吸",
+            "D. 皮下气肿",
+            "E. 以上都是",
+          ],
+          answer: "E",
+          type: "single",
+          reason:
+            "解析：钝性胸部损伤常由减速、挤压、撞击或冲击暴力引起，损伤机制复杂。钝性暴力会破坏胸廓的完整性，导致心脏和肺部在胸腔内碰撞、挤压、旋转和扭曲，造成组织广泛挫伤。受损的组织通常会发生水肿，可能导致器官功能障碍或衰竭。伤员常出现肋骨或胸骨骨折，并发症包括血胸、气胸、呼吸异常和皮下气肿。常常合并其他部位的损伤。钝性挫伤和裂伤是常见的器官组织损伤类型，心肺组织挫伤后的水肿常导致急性肺损伤、心力衰竭和心律失常。",
+        },
+        {
+          id: 30,
+          text: "女，38岁，右肩部外伤后疼痛、活动受限2小时。查体：右侧肩胛盂处有空虚感，Dugas征阳性。X线检查未见骨折，首选的治疗方法是",
+          options: [
+            "A. 外展支具固定",
+            "B. 肩部绷带固定",
+            "C. 三角巾悬吊固定",
+            "D. 切开复位",
+            "E. 麻醉下Hippocrates法复位",
+          ],
+          answer: "E",
+          type: "single",
+          reason:
+            "解析：患者右肩外伤后肩胛盂空虚、Dugas 征阳性，X 线无骨折，诊断为肩关节脱位。治疗时，手法复位是关键。Hippocrates 法（足蹬法）操作简便、效果确切，在麻醉下进行可降低肌肉紧张度，提升复位成功率，减少患者痛苦。外展支具、绷带、三角巾悬吊常用于复位后固定。切开复位多用于复杂情况，该患者无此必要，因此首选麻醉下 Hippocrates 法复位。",
+        },
+        {
+          id: 31,
+          text: "12岁男孩，跌后当晚自感全身不适，发热，左膝部疼痛，经用青霉素3日无效来院，检查左股骨下端肿胀，有局限性深压痛，膝关节内有积液，活动障碍，体温39.5℃，白细胞计数18×10⁹/L，中性0.9，血沉80mm/h，诊断",
+          options: [
+            "A. 风湿性膝关节炎",
+            "B. 化脓性膝关节炎",
+            "C. 股骨下端化脓性骨髓炎",
+            "D. 创伤性膝关节炎",
+            "E. 股骨下端骨肉瘤",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：患儿摔伤后出现皮肤或黏膜破损，继而出现金葡菌伤口感染及股骨下端血源性感染。患儿体温升高，血象升高，血沉加快均提示化脓性感染。结合患儿左侧股骨下端肿胀，考虑股骨下端化脓性骨髓炎。",
+        },
+        {
+          id: 32,
+          text: "男，32岁，右腰部撞击伤4小时，肉眼血尿伴腰痛。血压和脉率均平稳。B超示肾周血肿 5cm×8cm。通常最好治疗方法是",
+          options: [
+            "A. 观察和支持疗法",
+            "B. 半肾切除",
+            "C. 用导尿管冲洗肾盂",
+            "D. 肾周围血肿的早期引流",
+            "E. 肾造瘘",
+          ],
+          answer: "A",
+          type: "single",
+          reason:
+            "解析：患者右腰部撞击伤后有肉眼血尿及肾周血肿，但血压和脉率平稳，说明病情相对稳定。对于此类肾损伤，若无进行性出血、休克等严重情况，观察和支持疗法是首选，多数小的肾周血肿可自行吸收。B 项半肾切除创伤大，一般用于严重肾损伤无法修复等情况；C 项冲洗肾盂对该情况意义不大；D 项早期引流可能引发感染等并发症；E 项肾造瘘多用于上尿路梗阻等情况，故本题选 A。",
+        },
+        {
+          id: 33,
+          text: "泌尿系感染最常见的病原菌是",
+          options: [
+            "A. 革兰阴性杆菌",
+            "B. 革兰阳性球菌",
+            "C. 革兰阴性球菌",
+            "D. 革兰阳性杆菌",
+            "E. 真菌",
+          ],
+          answer: "A",
+          type: "single",
+          reason:
+            "解析：泌尿系统感染最常见的病原菌是革兰阴性杆菌，其中大肠埃希菌最为常见，约占泌尿系感染的70%以上。这是因为革兰阴性杆菌具有较强的黏附性，能更好地附着在泌尿系统黏膜表面，且对泌尿系统环境有较好的适应性，容易在其中生长繁殖，引发感染。相比之下，革兰阳性球菌、革兰阴性球菌、革兰阳性杆菌和真菌等引起的泌尿系感染相对较少。",
+        },
+        {
+          id: 34,
+          text: "(34~35 题共用备选答案) 能使甲状腺缩小、变硬的是",
+          options: [
+            "A. 丙基硫氧嘧啶",
+            "B. 心得安",
+            "C. 碘剂",
+            "D. 甲状腺素",
+            "E. 氢化可的松",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "34-35",
+          reason:
+            "解析：甲亢术前服用卢戈液(碘剂)可使甲状腺体缩小、变硬，血管震颤减小。",
+        },
+        {
+          id: 35,
+          text: "可使甲状腺增大、充血的是",
+          options: [
+            "A. 丙基硫氧嘧啶",
+            "B. 心得安",
+            "C. 碘剂",
+            "D. 甲状腺素",
+            "E. 氢化可的松",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "34-35",
+          reason:
+            "解析：丙基硫氧嘧啶是抗甲状腺药物，阻止甲状腺内甲状腺素的合成。但服用较久后，由于垂体前叶的代偿作用，增加了促甲状腺素的分泌，引起甲状腺增大、充血。",
+        },
+        {
+          id: 36,
+          text: "(36~39 题共用备选答案)  腹腔穿刺液中有大量中性粒细胞，革兰染色阳性球菌",
+          options: [
+            "A. 原发性腹膜炎",
+            "B. 胃、十二指肠穿孔",
+            "C. 阑尾炎穿孔",
+            "D. 肝脾破裂",
+            "E. 出血坏死性胰腺炎",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "36-39",
+          reason:
+            "解析：原发性腹膜炎，多为溶血性链球菌及肺炎链球菌，革兰染色阳性。",
+        },
+        {
+          id: 37,
+          text: "腹腔穿刺液中有大量中性粒细胞，无细菌",
+          options: [
+            "A. 原发性腹膜炎",
+            "B. 胃、十二指肠穿孔",
+            "C. 阑尾炎穿孔",
+            "D. 肝脾破裂",
+            "E. 出血坏死性胰腺炎",
+          ],
+          answer: "E",
+          type: "single",
+          sharedGroup: "36-39",
+          reason: "解析：胰腺炎引起的腹腔积液是炎性渗出液，内无细菌。",
+        },
+        {
+          id: 38,
+          text: "腹腔穿刺液中有大量粒细胞，细菌很少",
+          options: [
+            "A. 原发性腹膜炎",
+            "B. 胃、十二指肠穿孔",
+            "C. 阑尾炎穿孔",
+            "D. 肝脾破裂",
+            "E. 出血坏死性胰腺炎",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "36-39",
+          reason:
+            "解析：上消化道内细菌少，主要为消化液，后期可引起化脓性腹膜炎。",
+        },
+        {
+          id: 39,
+          text: "腹腔穿刺液中有大量中性粒细胞，革兰染色阴性杆菌",
+          options: [
+            "A. 原发性腹膜炎",
+            "B. 胃、十二指肠穿孔",
+            "C. 阑尾炎穿孔",
+            "D. 肝脾破裂",
+            "E. 出血坏死性胰腺炎",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "36-39",
+          reason:
+            "解析：阑尾位于下消化道，内有大量大肠杆菌，属革兰染色阴性杆菌。",
+        },
+        {
+          id: 40,
+          text: "(40~41 题共用备选答案) 需要切除肾脏、全长输尿管及输尿管开口处部分膀胱",
+          options: [
+            "A. 肾癌",
+            "B. 肾盂癌",
+            "C. 肾结核",
+            "D. 严重肾损伤",
+            "E. 巨大肾积水",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "40-41",
+          reason:
+            "解析：肾盂肿瘤多数为移行细胞乳头状肿瘤，肿瘤沿肾盂黏膜扩散，需要切除肾脏、全长输尿管及输尿管开口处部分膀胱。",
+        },
+        {
+          id: 41,
+          text: "肾切除时，应切除全部肾周围筋膜，脂肪和局部淋巴结",
+          options: [
+            "A. 肾癌",
+            "B. 肾盂癌",
+            "C. 肾结核",
+            "D. 严重肾损伤",
+            "E. 巨大肾积水",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "40-41",
+          reason:
+            "解析：肾癌根治性肾切除术是主要的治疗方法，切除范围包括患肾和全部肾周围筋膜，脂肪和局部淋巴结。",
+        },
+        {
+          id: 42,
+          text: "(42~44 题共用题干: 女性,70 岁,行右乳癌改良根治术,肿物直径 3cm 右腋下淋巴结可见癌转移。雌激素、孕激素受体均为阳性,胸片,腹部 B 超、骨扫描均未见异常。) 患者TNM分期为",
+          options: [
+            "A. T₁N₁M₀",
+            "B. T₁N₂M₀",
+            "C. T₂N₁M₀",
+            "D. T₃N₁M₀",
+            "E. T₂N₂M₀",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "42-44",
+          reason:
+            "解析：肿瘤直径3cm为T₂；同侧可及肿大淋巴结转移，为N¹；无远处转移为M₀。因此，该病人的TNM分期为T₂N₁M₀。",
+        },
+        {
+          id: 43,
+          text: "患者的临床分期为",
+          options: ["A. 0期", "B. I期", "C. II期", "D. III期", "E. IV期"],
+          answer: "C",
+          type: "single",
+          sharedGroup: "42-44",
+          reason:
+            "解析：乳腺癌的临床分期为：O期，TisN₀M₀；I期，T₁N₀M₀；II期，T₀~₁N₁M₀，T₂N₀~₁M₀，T₃N₀M₀；III期，T₀~₂N₂M₀，T₃N₁~₂M₀，T₄任何NM₀，任何TN₃M₀；IV期，M₁任何TN。患者TNM分期为T₂N₁M₀，属于II期。",
+        },
+        {
+          id: 44,
+          text: "给予患者口服三苯氧胺，属于以下何种治疗",
+          options: [
+            "A. 放射治疗",
+            "B. 化学治疗",
+            "C. 免疫治疗",
+            "D. 内分泌治疗",
+            "E. 基因治疗",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "42-44",
+          reason: "解析：三苯氧胺为乳腺癌患者内分泌治疗的首选有效药物。",
+        },
+        {
+          id: 45,
+          text: "(45~47 题共用题干: 男性,30 岁,电工,因操作不慎产生电火花,引起面、颈前部烧伤,创面有水疱,部分水疱破损,创面基底红白相间,有疼痛。) 该病人烧伤面积约为",
+          options: ["A. 3%", "B. 4.5%", "C. 9%", "D. 10%", "E. 15%"],
+          answer: "B",
+          type: "single",
+          sharedGroup: "45-47",
+          reason:
+            "解析：面部烧伤为3%，颈部为3%，前部烧伤按照1.5%计算，因此该患者的烧伤面积为4.5%。",
+        },
+        {
+          id: 46,
+          text: "根据以上描述，对该病人烧伤深度的诊断为",
+          options: ["A. I度", "B. 浅Ⅱ度", "C. 深Ⅱ度", "D. Ⅲ度", "E. 无法判断"],
+          answer: "C",
+          type: "single",
+          sharedGroup: "45-47",
+          reason:
+            "解析：深Ⅱ度烧伤是指烧伤程度达到了皮肤的真皮层，介于浅Ⅱ度和Ⅲ度之间。在这种程度的烧伤中，可能出现水疱，当水疱被去除后，创面会稍微湿润，并且呈现出红白相间的颜色。与此同时，病人可能会感觉到痛觉的反应较为迟钝。",
+        },
+        {
+          id: 47,
+          text: "根据病情判断烧伤严重程度为",
+          options: [
+            "A. 轻度烧伤",
+            "B. 中度烧伤",
+            "C. 重度烧伤",
+            "D. 特重度烧伤",
+            "E. 无法判断",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "45-47",
+          reason: "解析：轻度烧伤是指烧伤程度为Ⅱ度，其烧伤面积不超过10%。",
+        },
+        {
+          id: 48,
+          text: "(48~50 题共用题干: 男,51 岁。汽车撞伤骨盆区后伤部疼痛,伴有休克,不能自行排尿,膀胱膨满,尿道口有少量血性液体溢出。直肠指诊：指套上染有血迹。) 首先考虑下列哪项诊断",
+          options: [
+            "A. 骨盆骨折",
+            "B. 骨盆骨折合并休克",
+            "C. 骨盆骨折合并休克与尿道损伤",
+            "D. 骨盆骨折合并休克，尿道与直肠损伤",
+            "E. 骨盆骨折合并膀胱破裂",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "48-50",
+          reason:
+            "解析：根据患者体征，不可自行排尿且具有膀胱膨满提示合并尿道损伤，肛门指诊有血迹提示为骨盆骨折破入直肠的开放性骨折；所以正确答案是D项。",
+        },
+        {
+          id: 49,
+          text: "治疗措施的先后顺序哪项正确",
+          options: [
+            "A. 抗休克，修复尿道、直肠损伤，处理骨折",
+            "B. 修复尿道、直肠损伤，处理骨折，抗休克",
+            "C. 抗休克，处理骨折，修复尿道、直肠损伤",
+            "D. 处理骨折，抗休克，修复尿道、直肠损伤",
+            "E. 处理骨折，修复尿道、直肠损伤，抗休克",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "48-50",
+          reason:
+            "解析：此时改善代谢，纠正休克状态是第一要务，尿道损伤、直肠损伤若不及时处理也将出现尿外渗、感染等情况，后期修复效果差，故先于骨折的处理。",
+        },
+        {
+          id: 50,
+          text: "休克难以纠正时，应采取下列哪项最主要的措施",
+          options: [
+            "A. 加快输血速度",
+            "B. 使用升压药物",
+            "C. 使用止血药物",
+            "D. DSA 栓塞髂内动脉",
+            "E. DSA 栓塞髂外动脉",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "48-50",
+          reason:
+            "解析：骨盆骨折出血休克而难以纠正时，可能是由于髂内动脉破裂所致，在紧急情况下采用DSA栓塞髂内动脉。",
+        },
+        {
+          id: 51,
+          title: "专业知识",
+          text: "腹外疝嵌顿是指",
+          options: [
+            "A. 肠管成疝囊一部分的腹外疝",
+            "B. 内容物与疝囊粘连的腹外疝",
+            "C. 疝囊颈弹性收缩将内容物卡住的腹外疝",
+            "D. 所有不能回纳的腹外疝",
+            "E. 以上都不是",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：腹外疝嵌顿是指疝囊颈弹性收缩将内容物卡住，使疝内容物不能回纳的腹外疝情况。A选项描述的是滑动疝；B选项内容物与疝囊粘连不一定就是嵌顿，可能只是难复性疝；D选项所有不能回纳的腹外疝不准确，难复性疝也不能回纳，但不是嵌顿，嵌顿是因疝囊颈弹性收缩卡住内容物，与难复性疝的机制不同，所以选C。",
+        },
+        {
+          id: 52,
+          text: "男，27岁。因刀伤致腹部开放性损伤，部分肠管脱出，其紧急处理措施包括",
+          options: [
+            "A. 用清洁纱布或碗覆盖保护后包扎",
+            "B. 迅速将肠管还纳于腹腔",
+            "C. 用干净水清洁后暂时包扎",
+            "D. 敞开伤口送医院处理",
+            "E. 将肠管还纳，用消毒棉垫加压包扎",
+          ],
+          answer: "A",
+          type: "single",
+          reason:
+            "解析：当发生利器刺入胸、腹部或肠管外脱事故时，千万不要将脱出的肠管送回腹腔，以免因出血过多或脏器严重感染而危及伤者生命。应在脱出的肠管上覆盖消毒纱布或消毒布类，再用干净的碗或盆扣在伤口上，用绷带或布带固定，迅速送医院抢救。",
+        },
+        {
+          id: 53,
+          text: "男性，39岁，已诊断十二指肠球溃疡并幽门梗阻，经内科禁食，胃肠减压，补液等治疗3天后缓解，其幽门梗阻的原因可能为",
+          options: [
+            "A. 因胃癌造成幽门梗阻",
+            "B. 因食物消化不良造成幽门梗阻",
+            "C. 因炎症水肿造成幽门梗阻",
+            "D. 因胃内良性肿瘤造成幽门梗阻",
+            "E. 因胃外肿块压迫造成幽门梗阻",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：该男性诊断为十二指肠球溃疡并幽门梗阻，经内科保守治疗3天即缓解。通常胃癌、胃内良性肿瘤、胃外肿块压迫所致幽门梗阻难以在短时间内通过保守治疗缓解。而十二指肠球部溃疡易导致局部炎症水肿，炎症水肿可使幽门通道变窄，引起幽门梗阻，这种因炎症水肿导致的梗阻在禁食、胃肠减压、补液等治疗后，随着炎症的消退，水肿减轻，梗阻症状可较快缓解，所以最可能的原因是炎症水肿造成的幽门梗阻。",
+        },
+        {
+          id: 54,
+          text: "脾破裂时可出现下列X线征象，但应不包括",
+          options: [
+            "A. 胃向右前方移位",
+            "B. 胃大弯有受压现象",
+            "C. 出现气液平面",
+            "D. 胃与横结肠间距离增宽",
+            "E. 左膈升高，结肠脾曲下移",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：胃右移、横结肠下移，胃大弯有锯齿形压迹是脾破裂的X线征象。液平面是X线检查中气液分离形成的影像学表现，常见于肠梗阻、肠麻痹等疾病。",
+        },
+        {
+          id: 55,
+          text: "下列关于细菌性肝脓肿的描述，正确的是",
+          options: [
+            "A. 革兰阴性球菌为主要致病菌",
+            "B. 脓液多为棕褐色，无细菌",
+            "C. 以右叶多见，多单发",
+            "D. 多为胆源性肝脓肿",
+            "E. 唯一有效的治疗是手术引流",
+          ],
+          answer: "D",
+          type: "single",
+          reason:
+            "解析：细菌性肝脓肿主要致病菌为肺炎克雷伯菌，大肠埃希菌，厌氧链球菌，葡萄球菌等革兰阴性杆菌和金黄色葡萄球菌等，A错误；脓液多为黄白色，有细菌，B错误；肝脓肿常为多发性，以右叶多见，C错误；胆道感染是细菌性肝脓肿的主要原因，所以多为胆源性肝脓肿，D正确；治疗包括抗生素治疗、经皮肝穿刺脓肿置管引流术、切开引流等，并非手术引流是唯一有效治疗，E错误。故答案为D。",
+        },
+        {
+          id: 56,
+          text: "甲亢青年女性，心率106次/分，血压108/72mmHg，应属于",
+          options: [
+            "A. 正常",
+            "B. 轻度甲亢",
+            "C. 中度甲亢",
+            "D. 重度甲亢",
+            "E. 甲状腺危象",
+          ],
+          answer: "C",
+          type: "single",
+          reason:
+            "解析：基础代谢率的常用计算公式为：基础代谢率=(脉率+脉压)-111。所以病人的基础代谢率为[106+(108-72)]-111=31%，属中度甲亢(30%~60%)。",
+        },
+        {
+          id: 57,
+          text: "男，25岁。腹痛、脓血便、发热2个月。大便10次/日，体温39℃。粪镜检及培养未见病原体。结肠镜检查示结肠弥漫分布的糜烂及浅溃疡。病理学提示重度慢性炎症。左氧氟沙星联合甲硝唑治疗1周症状无缓解。最适宜的治疗药物是",
+          options: [
+            "A. 泼尼松",
+            "B. 柳氮磺吡啶",
+            "C. 硫唑嘌呤",
+            "D. 美沙拉嗪",
+            "E. 美沙拉嗪联合美沙拉嗪栓",
+          ],
+          answer: "A",
+          type: "single",
+          reason:
+            "解析：该患者表现为腹痛、脓血便、发热，结肠镜显示结肠弥漫性糜烂及浅溃疡，病理提示重度慢性炎症，且左氧氟沙星联合甲硝唑治疗无效，考虑为溃疡性结肠炎重症。对于溃疡性结肠炎重症患者，糖皮质激素如泼尼松可抑制炎症反应、调节免疫，是最适宜的治疗药物。柳氮磺吡啶、美沙拉嗪一般用于轻、中度患者的治疗；硫唑嘌呤多用于激素依赖或无效的患者，一般不作为首选。故答案为A。",
+        },
+        {
+          id: 58,
+          text: "男性，40岁。5年前因甲亢手术治疗，近年肝硬化腹胀，住院诊断为中度甲亢，其治疗应",
+          options: [
+            "A. 抗甲状腺药物治疗",
+            "B. 同位素治疗",
+            "C. 保肝利尿治疗后手术",
+            "D. 手术治疗",
+            "E. 保肝利尿同时抗甲亢药治疗",
+          ],
+          answer: "B",
+          type: "single",
+          reason:
+            "解析：该患者5年前曾因甲亢行手术治疗，现又出现中度甲亢，且合并肝硬化腹胀。手术治疗可能会加重肝脏负担，引发肝功能衰竭等严重并发症；抗甲状腺药物治疗可能会有肝损伤等不良反应，对于已有肝硬化的患者风险较大。同位素治疗(放射性碘治疗)适用于不宜手术或药物治疗效果不佳等情况，对该患者较为合适，可通过放射性碘破坏甲状腺组织，减少甲状腺激素的合成和分泌，达到治疗甲亢的目的，同时对肝脏影响相对较小。故答案为B。",
+        },
+        {
+          id: 59,
+          text: "男性，34岁。计算机工程师，近期感觉久坐后下肢沉重酸胀，容易疲劳。护士指导其在工作期间定时站立，活动下肢，以促进下肢血液循环，其原理是利用",
+          options: [
+            "A. 小腿肌泵收缩功能",
+            "B. 胸腔吸气期负压",
+            "C. 心脏舒张期负压",
+            "D. 静脉瓣膜向心单向开放",
+            "E. 地心对血栓的吸引力",
+          ],
+          answer: "A",
+          type: "single",
+          reason:
+            "解析：下肢静脉血液回流主要依靠小腿肌泵收缩功能、静脉瓣膜向心单向开放以及胸腔吸气期负压等机制。其中，小腿肌泵收缩功能是下肢静脉回流的重要动力。当小腿肌肉收缩时，可挤压静脉，使静脉内血液向心流动，促进下肢血液循环。患者久坐后下肢沉重酸胀，通过定时站立、活动下肢，主要是利用小腿肌泵收缩功能来促进血液回流，减轻下肢淤血等情况。胸腔吸气期负压主要是在吸气时使胸腔内压力降低，有助于下腔静脉血液回流，但不是本题中促进下肢血液循环的主要原理；心脏舒张期负压主要作用于心脏自身的血液充盈等，与下肢血液循环关系不大；静脉瓣膜向心单向开放是保证血液单向回流的重要结构基础，但不是活动下肢促进血液循环的主要原理；地心对血栓的吸引力是阻碍血液回流的因素，而不是促进因素。故答案为A。",
+        },
+        {
+          id: 60,
+          text: "(60~62 题共用备选答案) 临床表现是非特异性的，穿孔率达 80%的是",
+          options: [
+            "A. 新生儿阑尾炎",
+            "B. 小儿阑尾炎",
+            "C. 妊娠期阑尾炎",
+            "D. 老年人阑尾炎",
+            "E. 异位阑尾炎",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "60-62",
+          reason:
+            "解析：新生儿阑尾炎很少见，其早期临床表现无特殊性，仅有厌食，恶心、呕吐、腹泻和脱水等，发热和白细胞升高均不明显，因此早期难于确诊，穿孔率可高达80%，死亡率也很高。",
+        },
+        {
+          id: 61,
+          text: "临床表现和病理变化常不一致的是",
+          options: [
+            "A. 新生儿阑尾炎",
+            "B. 小儿阑尾炎",
+            "C. 妊娠期阑尾炎",
+            "D. 老年人阑尾炎",
+            "E. 异位阑尾炎",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "60-62",
+          reason:
+            "解析：因老年人对疼痛感觉迟钝，腹肌薄弱，防御机能减退，所以主诉不强烈，体征不典型，临床表现轻而病理改变却很重，提问和白细胞升高均不明显，容易延误诊断和治疗。",
+        },
+        {
+          id: 62,
+          text: "大网膜发育不全，穿孔率可达 30%的是",
+          options: [
+            "A. 新生儿阑尾炎",
+            "B. 小儿阑尾炎",
+            "C. 妊娠期阑尾炎",
+            "D. 老年人阑尾炎",
+            "E. 异位阑尾炎",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "60-62",
+          reason:
+            "解析：小儿大网膜发育不全，不能起到足够的保护作用，患儿也不能清除地提供病史，所以穿孔率较高，并发症和死亡率也较高。",
+        },
+        {
+          id: 63,
+          text: "(63~66 题共用备选答案) 患者，男，22岁，2小时前不慎从3m高处坠落，左胸、腹部着地，腹腔穿刺抽出不凝血，诊断外伤性脾破裂，术中探查见脾脏膈面有约4cm裂口，深约1cm，无活动性出血。应采取的措施为",
+          options: [
+            "A. 全脾切除",
+            "B. 脾部分切除",
+            "C. 脾裂口修补缝合",
+            "D. 脾动脉结扎术",
+            "E. 腹腔穿刺",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "63-66",
+          reason:
+            "解析：I级损伤，可保留脾。脾脏裂口不深，无活动性出血，可缝合修补。",
+        },
+        {
+          id: 64,
+          text: "患者，女，29岁，骑车时与汽车相撞，左肋骨骨折，伴血气胸，诊断脾破裂，术中探查脾下极碎裂。应采取的措施为",
+          options: [
+            "A. 全脾切除",
+            "B. 脾部分切除",
+            "C. 脾裂口修补缝合",
+            "D. 脾动脉结扎术",
+            "E. 腹腔穿刺",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "63-66",
+          reason: "解析：下极破裂可做脾下极切除，操作不困难。",
+        },
+        {
+          id: 65,
+          text: "患者，男，26岁，从5m高处坠落，感腹部疼痛，腹腔抽出不凝血，术中探查脾脏多处碎裂，脾门有活动性出血。应采取的措施为",
+          options: [
+            "A. 全脾切除",
+            "B. 脾部分切除",
+            "C. 脾裂口修补缝合",
+            "D. 脾动脉结扎术",
+            "E. 腹腔穿刺",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "63-66",
+          reason:
+            "解析：脾脏多发现碎裂情况，同时脾门出现活动性出血现象，表明损伤情况十分严重。因此，应迅速进行全脾切除手术来处理这一情况。",
+        },
+        {
+          id: 66,
+          text: "男性，33岁，3天前因左季肋部外伤，当时局部疼痛，经休息后缓解。今晨起床后突然出现腹痛，心率108/min，血压60/40mmHg，全腹压痛。最有价值的检查是",
+          options: [
+            "A. 全脾切除",
+            "B. 脾部分切除",
+            "C. 脾裂口修补缝合",
+            "D. 脾动脉结扎术",
+            "E. 腹腔穿刺",
+          ],
+          answer: "E",
+          type: "single",
+          sharedGroup: "63-66",
+          reason:
+            "解析：根据病史及检查考虑患者为延迟性脾破裂，因此腹腔穿刺可穿出不凝血即可诊断。",
+        },
+        {
+          id: 67,
+          text: "(67~68 题共用备选答案) 检查胆系疾病的首选方法是",
+          options: [
+            "A. B超",
+            "B. CT",
+            "C. 经内镜逆行性胰胆管造影",
+            "D. 口服胆囊造影",
+            "E. 经皮肝穿刺胆道造影",
+          ],
+          answer: "A",
+          type: "single",
+          sharedGroup: "67-68",
+          reason:
+            "解析：B超检查提供的图像清晰，分辨率高，是一种安全、快速、简便、经济而准确的检查方法，是诊断胆道疾病的首选方法。",
+        },
+        {
+          id: 68,
+          text: "检查胆囊功能的方法是",
+          options: [
+            "A. B超",
+            "B. CT",
+            "C. 经内镜逆行性胰胆管造影",
+            "D. 口服胆囊造影",
+            "E. 经皮肝穿刺胆道造影",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "67-68",
+          reason: "解析：口服胆囊造影术可以了解胆囊浓缩和收缩功能。",
+        },
+        {
+          id: 69,
+          text: "(69~71 题共用题干: 女性,40 岁，颈前右侧肿块 5 天,无痛,质硬,表面不光滑,随吞咽活动。) 该病人最可能的诊断是",
+          options: [
+            "A. 颈淋巴结结核",
+            "B. 甲状腺腺瘤",
+            "C. 甲状腺癌",
+            "D. 甲状腺舌骨囊肿",
+            "E. 桥本甲状腺肿",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "69-71",
+          reason:
+            "解析：颈淋巴结结核多有全身结核症状，与本题不符。甲状腺腺瘤质地软、表面光滑，与题干表现不同。甲状腺舌骨囊肿在颈前正中，不在右侧。桥本甲状腺肿是双侧弥漫性肿大。而甲状腺癌常表现为质硬、表面不光滑、边界不清，部分能随吞咽活动，该患者颈前右侧无痛、质硬、表面不光滑且随吞咽活动的肿块，符合甲状腺癌特征，所以选C。",
+        },
+        {
+          id: 70,
+          text: "该病人行甲状腺核素扫描最可能出现的结果为",
+          options: [
+            "A. 热结节",
+            "B. 冷结节",
+            "C. 温结节",
+            "D. 冷结节，边缘清晰",
+            "E. 冷结节，边缘模糊",
+          ],
+          answer: "E",
+          type: "single",
+          sharedGroup: "69-71",
+          reason: "解析：甲状腺癌为冷结节。",
+        },
+        {
+          id: 71,
+          text: "进一步最有助于诊断的检查为",
+          options: [
+            "A. 基础代谢",
+            "B. 甲状腺素测定",
+            "C. 穿刺细胞学检查",
+            "D. 甲状腺摄碘率的测定",
+            "E. 胸部X线透视",
+          ],
+          answer: "C",
+          type: "single",
+          sharedGroup: "69-71",
+          reason:
+            "解析：穿刺细胞学检查不但有助于鉴别肿瘤的良恶性，而且可进一步明确恶性肿瘤的病理类型。",
+        },
+        {
+          id: 72,
+          text: "(72~75 题共用题干: 男性，58 岁，病人持续性寒战高热 2 周，伴有头痛、恶心等，这几天会阴部有坠胀感，便意不尽，排尿不适，大便有黏液。) 体检中见肛门部周围无异常发现，下列检查中最有可能的发现是",
+          options: [
+            "A. 肛指检查直肠内有肿块无压痛",
+            "B. 直肠指检扪及柔软有波动的包块，有压痛",
+            "C. 肛门镜见有内痔核",
+            "D. 发现有混合痔",
+            "E. 肛指检查正常",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "72-75",
+          reason:
+            "解析：患者表现寒战、发热，伴头痛、恶心、会阴部坠胀，且出现直肠和尿路刺激征象，查体时发现肛门周围皮肤无异常。鉴于这些症状，需要考虑骨盆直肠窝脓肿的可能性。直肠指检时，可触及柔软的肿块，同时伴有压痛和波动感。",
+        },
+        {
+          id: 73,
+          text: "如疑为直肠肛管周围脓肿，哪项方法检查最合适",
+          options: [
+            "A. CT检查",
+            "B. 直接切开引流",
+            "C. B型超声波检查",
+            "D. 穿刺抽出脓液",
+            "E. MRI",
+          ],
+          answer: "D",
+          type: "single",
+          sharedGroup: "72-75",
+          reason:
+            "解析：骨盆直肠间隙脓肿，也被称为骨盆直肠窝脓肿，是一种罕见但重要的情况。通常由肛腺脓肿或坐骨肛管间隙脓肿穿破肛提肌，进入骨盆直肠间隙引起。也可由于直肠炎、直肠溃疡或直肠外伤而引发。由于此间隙位于较深的位置且空间较大，全身症状比局部症状更为明显。早期症状包括发热、寒战和全身疲倦不适。局部表现为直肠坠胀感，排便时感到不适，常伴有排尿困难。会阴部检查通常无异常，但直肠指诊可感受到直肠壁上的肿胀和压痛，并有波动感。诊断主要通过穿刺抽脓进行，可通过直肠指引，在肛门周围皮肤进行穿刺。",
+        },
+        {
+          id: 74,
+          text: "病人经补液加抗菌治疗后，体温仍持续在 38℃左右，经肛门镜下细针穿刺有脓液，最大可能应考虑为",
+          options: [
+            "A. 复杂性肛瘘",
+            "B. 骨盆直肠间隙脓肿",
+            "C. 混合痔",
+            "D. 肛门周围脓肿",
+            "E. 坐骨肛管间隙脓肿",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "72-75",
+          reason:
+            "解析：骨盆直肠间隙脓肿亦称骨盆直肠窝脓肿，罕见但极为重要。通常由肛腺脓肿或坐骨肛管间隙脓肿穿破肛提肌，进而进入骨盆直肠间隙所致，也可由直肠炎、直肠溃疡或直肠外伤所导致。因该间隙位于较深、空间较大的位置，所以引发的全身症状较为明显，而局部症状不太明显。早期已有全身中毒症状，如发热、寒战、全身疲劳不适。局部症状表现为直肠坠胀感，排便时感到不适，常伴有排尿困难。会阴部检查通常无异常，直肠指诊可触及直肠壁上的肿胀隆起，伴有压痛和波动感。患者出现寒战、高热、会阴部坠胀、频繁便意、尿液排出不畅和大便中有黏液时，应考虑骨盆直肠间隙脓肿的可能。",
+        },
+        {
+          id: 75,
+          text: "病人已做肛管直肠周围脓肿切开引流术，最有可能出现",
+          options: [
+            "A. 肛旁脓肿发作",
+            "B. 切开引流后形成肛瘘",
+            "C. 大便失禁",
+            "D. 直肠黏膜脱垂",
+            "E. 形成慢性肛裂",
+          ],
+          answer: "B",
+          type: "single",
+          sharedGroup: "72-75",
+          reason:
+            "解析：肛周脓肿切开引流后，大多数情况下（约70%），会发展为肛瘘。",
+        },
+        {
+          id: 76,
+          title: "专业实践能力",
+          text: "(76~80 题共用题干: 患者女性,58 岁,以＂发现泌尿系结石,血钙升高 3 年,甲状腺右后方占位 1 个月＂为主诉入院。近 1 年出现口渴、多饮,伴夜尿增多,无腰痛、肉眼血尿、尿中泡沫、尿中排石。既往发现糖耐量异常 2 年、高血压、高血脂 8 年。PE：身高减少 2cm。既往 B 超提示：甲状腺右叶下极后方可见低回声 2cm×1cm×1cm,形态不规则。) 患者可能诊断为",
+          options: [
+            "A. 甲状腺髓样癌",
+            "B. 甲状腺腺瘤",
+            "C. 甲状腺乳头状癌",
+            "D. 甲状旁腺功能亢进",
+            "E. 甲状腺滤泡样癌",
+            "F. 甲状腺未分化癌",
+          ],
+          answer: ["D"],
+          type: "multiple",
+          sharedGroup: "76-80",
+          reason:
+            "解析：患者血钙升高，有泌尿系结石，甲状腺右后方占位，伴口渴、多饮、夜尿增多及身高减少等表现，符合甲状旁腺功能亢进特点，而不是单纯甲状腺疾病表现，所以选D。",
+        },
+        {
+          id: 77,
+          text: "进一步明确诊断，患者应该进行的生化检查包括",
+          options: [
+            "A. 血 T₃、T₄、TSH",
+            "B. 血PTH",
+            "C. 血甲状腺抗体检测",
+            "D. 血甲状腺球蛋白",
+            "E. 尿24小时钙磷测定",
+            "F. 血清游离钙",
+          ],
+          answer: ["B", "E", "F"],
+          type: "multiple",
+          sharedGroup: "76-80",
+          reason:
+            "解析：血PTH可直接反映甲状旁腺功能，血游离钙及尿24小时钙磷测定对判断钙磷代谢及甲状旁腺功能有重要意义，血T₃、T₄、TSH及甲状腺抗体等主要用于评估甲状腺功能，与本题甲状旁腺功能亢进诊断关系不大，所以选BEF。",
+        },
+        {
+          id: 78,
+          text: "为进一步定性及定位，患者还应该进行的辅助检查包括",
+          options: [
+            "A. 甲状腺及甲状旁腺 B 超",
+            "B. 核素扫描",
+            "C. 颈部 CT",
+            "D. 泌尿系 B 超",
+            "E. 尿环腺苷酸",
+            "F. 血甲状腺球蛋白",
+          ],
+          answer: ["A", "B", "C", "D", "E"],
+          type: "multiple",
+          sharedGroup: "76-80",
+          reason:
+            "解析：甲状腺及甲状旁腺B超、核素扫描、颈部CT可对病变定位定性，泌尿系B超可了解结石情况，尿环腺苷酸对甲状旁腺功能判断有帮助，血甲状腺球蛋白主要用于甲状腺癌等甲状腺疾病监测，与本题关系相对较小，所以选ABCDE。",
+        },
+        {
+          id: 79,
+          text: "经术前相关检查提示，该患者为原发性甲状旁腺功能亢进症。患者术前可能出现的生化异常有",
+          options: [
+            "A. 高血钙",
+            "B. 高尿钙",
+            "C. 高血磷",
+            "D. 低血磷",
+            "E. 低血钙",
+            "F. 低尿钙",
+          ],
+          answer: ["A", "B", "D"],
+          type: "multiple",
+          sharedGroup: "76-80",
+          reason:
+            "解析：原发性甲状旁腺功能亢进症会导致甲状旁腺激素分泌过多，使血钙升高，钙从尿中排出增多致高尿钙，同时血磷降低，所以选ABD。",
+        },
+        {
+          id: 80,
+          text: '经充分术前准备，患者行"右侧下极甲状旁腺腺瘤切除术"手术顺利。术后早期可能出现的并发症可能包括',
+          options: [
+            "A. 喉返神经损伤",
+            "B. 手足抽搐",
+            "C. 口角麻木",
+            "D. Chvostek 征",
+            "E. Trousseau 征",
+            "F. 血清钙<2.2mmol/L",
+          ],
+          answer: ["A", "B", "C", "D", "E", "F"],
+          type: "multiple",
+          sharedGroup: "76-80",
+          reason:
+            "解析：手术可能损伤喉返神经，术后因甲状旁腺素骤降可致血钙降低，出现手足抽搐、口角麻木，Chvostek征、Trousseau征阳性，血清钙可<2.2mmol/L，所以这些并发症都有可能出现。",
+        },
+        {
+          id: 81,
+          text: "(81~85 题共用题干: 患者男性，32 岁，建筑工人，下腹部受重物撞击致伤后 4 小时，腹痛初位于脐周，呈阵发性加剧，后蔓延至全腹部。查体：心率 102 次／分，血压 110／85mmHg，意识清晰，应答自如，全腹部压痛，反跳痛及肌紧张，移动性浊音阳性。血常规白细胞计数 13x10^9/L，血红蛋白 140g/L) 为进一步明确诊断，有意义的检查手段包括",
+          options: [
+            "A. ERCP",
+            "B. 胃镜检查",
+            "C. 立位腹平片",
+            "D. 腹部CT",
+            "E. 腹部动脉血管造影",
+            "F. 腹部超声",
+            "G. 诊断性腹腔穿刺",
+          ],
+          answer: ["C", "D", "F", "G"],
+          type: "multiple",
+          sharedGroup: "81-85",
+          reason:
+            "解析：ERCP主要用于胆胰疾病诊断，胃镜对腹部实质脏器损伤诊断价值不大，立位腹平片可看有无膈下游离气体等，腹部CT、超声能观察腹部脏器情况，诊断性腹腔穿刺可判断有无脏器损伤及损伤性质，选择性动脉血管造影一般用于可疑肝，肾胰，脾十二指肠等脏器损伤，经过上述检查未能证实者，有一定诊断价值。所以选CDFG。",
+        },
+        {
+          id: 82,
+          text: "该例患者的腹部闭合性损伤最有可能伤及的脏器是 [提示]腹部超声发现腹腔内有大量积液；诊断性腹腔穿刺出浑浊黄绿色消化液。",
+          options: [
+            "A. 脾破裂",
+            "B. 小肠破裂",
+            "C. 胃破裂",
+            "D. 胰腺损伤",
+            "E. 肾脏损伤",
+            "F. 骨盆骨折伴膀胱损伤",
+            "G. 肝损伤",
+          ],
+          answer: ["B"],
+          type: "multiple",
+          sharedGroup: "81-85",
+          reason:
+            "解析：脾破裂、肝损伤多为血性液体，胃破裂消化液多为酸性，胰腺损伤主要是胰液渗出，肾脏损伤为血尿，膀胱损伤为尿液，骨盆骨折伴膀胱损伤有骨盆骨折表现，而腹腔穿刺出浑浊黄绿色消化液符合小肠破裂特点，所以选B。",
+        },
+        {
+          id: 83,
+          text: "当前最可能挽救生命的措施是 [提示]进一步查体发现：意识丧失，四肢冰凉，体温39.2℃，心率122次/分，血压85/55mmHg,血常规提示白细胞计数21x10^9/L",
+          options: [
+            "A. 禁食水，胃肠减压",
+            "B. 进一步明确诊断",
+            "C. 抗感染",
+            "D. 急诊室就地复苏、抗休克",
+            "E. 转入 ICU 进一步复苏、抗休克",
+            "F. 边抗休克、边术前准备，尽快进行急诊手术",
+          ],
+          answer: ["F"],
+          type: "multiple",
+          sharedGroup: "81-85",
+          reason:
+            "解析：患者出现合并感染性休克表现，需要尽快抗休克同时做好术前准备进行手术，单纯复苏或进一步检查等会延误病情，所以边抗休克边术前准备，尽快手术是挽救生命的关键，选F。",
+        },
+        {
+          id: 84,
+          text: "最为合适的手术方式是",
+          options: [
+            "A. 单纯腹腔脓肿引流术",
+            "B. 肠裂口修补术",
+            "C. 肠切除肠吻合术",
+            "D. 肠造口术",
+            "E. 损伤肠管腹壁拖出外置观察",
+            "F. 损伤肠管旷置术",
+          ],
+          answer: ["C"],
+          type: "multiple",
+          sharedGroup: "81-85",
+          reason:
+            "解析：小肠破裂后，肠管损伤严重，为防止肠瘘等并发症，肠切除肠吻合术可彻底解决问题，单纯引流不能解决根本，修补术可能因肠管损伤重而效果不佳，造口术等适用于特定情况，这里最合适的是肠切除肠吻合术，选C。",
+        },
+        {
+          id: 85,
+          text: "外伤所致小肠破损行肠切除肠吻合术的指征是",
+          options: [
+            "A. 缺损过大或长的纵形裂伤",
+            "B. 多处破损集中在一小段肠管上",
+            "C. 打开系膜缘血肿，发现有肠壁穿孔",
+            "D. 肠壁内或系膜缘有大血肿",
+            "E. 系膜严重挫伤或断裂，或系膜与肠管间撕脱",
+            "F. 肠管严重碾挫伤，血供障碍",
+          ],
+          answer: ["A", "B", "D", "E", "F"],
+          type: "multiple",
+          sharedGroup: "81-85",
+          reason:
+            "解析：当小肠缺损过大、多处破损集中、系膜严重损伤、肠管血供障碍等情况时，肠管难以保留和修复，需要行肠切除肠吻合术，而打开系膜缘血肿发现肠壁穿孔不一定就需要切除，可先修补，所以选ABDEF。",
+        },
+        {
+          id: 86,
+          text: "(86~89 题共用题干: 患者，男性，48 岁。因 6 小时前解黑便伴头晕，伴突然呕血入院。黑便量约 300g，呕鲜红色血液量约 300mL，无血凝块。患者自述有 19 年乙肝病史，无“呕血、黑便”病史，曾诊断为“肝硬化失代偿期”。查体：体温36.9℃，脉搏 100 次/分，呼吸 22 次/分，血压 95/75mmHg。慢性病容，颈部皮肤见多个蜘蛛痣，巩膜无黄染。腹膨隆、软，肝于右肋缘下未及，脾左肋缘下 3cm，移动性浊音阳性。) 根据患者情况，患者可初步诊断为",
+          options: [
+            "A. 肝炎后肝硬化代偿期",
+            "B. 胃、十二指肠溃疡出血",
+            "C. 食管-胃底静脉曲张破裂出血",
+            "D. 门静脉高压",
+            "E. 门静脉高压性胃病出血",
+            "F. 出血性胃炎",
+          ],
+          answer: ["C", "D"],
+          type: "multiple",
+          sharedGroup: "86-89",
+          reason:
+            "解析：患者有乙肝肝硬化病史，腹膨隆、脾大、移动性浊音阳性提示门静脉高压，可致食管-胃底静脉曲张破裂出血。",
+        },
+        {
+          id: 87,
+          text: "为明确上消化道出血的原因，患者采取的检查方法应首选",
+          options: [
+            "A. 腹部B超",
+            "B. 腹部CT",
+            "C. 腹部MRI",
+            "D. 血管造影",
+            "E. 纤维胃镜",
+            "F. 食管吞钡X线检查",
+          ],
+          answer: ["E"],
+          type: "multiple",
+          sharedGroup: "86-89",
+          reason:
+            "解析：纤维胃镜能直接观察食管、胃、十二指肠病变，对明确上消化道出血原因最有价值，答案为E。",
+        },
+        {
+          id: 88,
+          text: "检查发现食管中下段静脉重度曲张，伴破裂出血。入院15小时后又呕400mL左右的鲜血。查体：脉搏110次/分，呼吸22次/分，血压80/50mmHg。目前应采取的紧急处理措施是",
+          options: [
+            "A. 输血、输液抗休克治疗",
+            "B. 急诊门诊分流术",
+            "C. 急诊TIPS",
+            "D. 静脉输入生长抑素",
+            "E. 放置三腔二囊管压迫止血",
+            "F. 静脉输入垂体后叶素",
+          ],
+          answer: ["A", "D", "E", "F"],
+          type: "multiple",
+          sharedGroup: "86-89",
+          reason:
+            "解析：患者出血量大、血压低，首先要输血输液抗休克，生长抑素、垂体后叶素可减少出血，三腔二囊管可压迫止血，目前不适合急诊手术，答案为ADEF。",
+        },
+        {
+          id: 89,
+          text: "若行断流术，此时应切断的静脉包括",
+          options: [
+            "A. 胃冠状静脉",
+            "B. 胃右静脉",
+            "C. 胃后静脉",
+            "D. 胃左静脉",
+            "E. 左膈下静脉",
+            "F. 胃底静脉",
+          ],
+          answer: ["A", "C", "D", "E"],
+          type: "multiple",
+          sharedGroup: "86-89",
+          reason:
+            "解析：断流术需切断胃冠状动脉、胃后静脉、左膈下静脉等，答案为ACDE。",
+        },
+        {
+          id: 90,
+          text: "(90~95 题共用题干: 患者女性，45 岁，因外伤而致脾脏破裂，急诊行脾脏切除术，术后两天进大量食物后出现上腹部饱胀不适、恶心、呕吐，呕吐起初为小口溢出胃液，后呕吐量逐渐增加，不含胆汁，呕吐时不费力，呕吐后症状并不减轻。既往糖尿病病史 5 年。查体：神志欠清，体温 36.9℃，血压 110/65mmHg，痛苦面容，被动体位，双肺呼吸音清，心率 120 次/分，律齐。腹部膨隆，可见胃型，上腹部压痛，无反跳痛，叩鼓音，肠鸣音未闻及，振水音阳性。) 为明确诊断，该患者选择的检查方法是",
+          options: [
+            "A. 胃镜检查",
+            "B. 钡餐造影",
+            "C. 腹部立位平片",
+            "D. 电解质",
+            "E. CT",
+            "F. 血气分析",
+          ],
+          answer: ["C", "D", "E", "F"],
+          type: "multiple",
+          sharedGroup: "90-95",
+          reason:
+            "解析：腹部立位平片、CT可看腹部情况，电解质、血气分析可了解内环境，对诊断有帮助，胃镜、钡餐可能加重病情，答案为CDEF。",
+        },
+        {
+          id: 91,
+          text: "腹部CT可见左上腹巨大液平面和充满腹腔的特大胃影及左膈肌抬高；腹部平片未见游离气体。该患者最有可能的诊断包括",
+          options: [
+            "A. 贫血",
+            "B. 应激性溃疡",
+            "C. 急性胃扩张",
+            "D. 胃穿孔",
+            "E. 十二指肠溃疡并穿孔",
+            "F. 水电解质紊乱",
+          ],
+          answer: ["C", "F"],
+          type: "multiple",
+          sharedGroup: "90-95",
+          reason:
+            "解析：腹部CT及平片表现符合急性胃扩张，大量呕吐易致水电解质紊乱，答案为CF。",
+        },
+        {
+          id: 92,
+          text: "该患者应进行的治疗措施有",
+          options: [
+            "A. 禁食水",
+            "B. 胃肠减压",
+            "C. 心电监护",
+            "D. 镇痛",
+            "E. 抑酸治疗",
+            "F. 急症手术",
+          ],
+          answer: ["A", "B", "C", "D", "E"],
+          type: "multiple",
+          sharedGroup: "90-95",
+          reason:
+            "解析：先禁食水、胃肠减压、心电监护、镇痛、抑酸等保守治疗，暂不手术，答案为ABCDE。",
+        },
+        {
+          id: 93,
+          text: "患者经过胃肠减压后引流出1500mL黄绿色液体，腹胀减轻。患者可能出现的水电解质紊乱的类型",
+          options: [
+            "A. 代谢性酸中毒",
+            "B. 呼吸性碱中毒",
+            "C. 低氯低钾代谢性碱中毒",
+            "D. 低氯低钾代谢性酸中毒",
+            "E. 低氯高钾代谢性酸中毒",
+            "F. 低氯低钠代谢性碱中毒",
+          ],
+          answer: ["C", "F"],
+          type: "multiple",
+          sharedGroup: "90-95",
+          reason:
+            "解析：大量胃液吐出含氯、钾离子，可致低氯低钾代谢性碱中毒，大量消化液丢失也可能有低氯低钠代谢性碱中毒，答案为CE。",
+        },
+        {
+          id: 94,
+          text: "该患者进一步应进行的治疗措施有",
+          options: [
+            "A. 输血",
+            "B. 急症手术",
+            "C. 持续胃肠减压",
+            "D. 洗胃",
+            "E. 纠正水电解质紊乱",
+            "F. 静脉营养支持",
+          ],
+          answer: ["C", "D", "E", "F"],
+          type: "multiple",
+          sharedGroup: "90-95",
+          reason:
+            "解析：继续持续胃肠减压、洗胃、纠正水电解质紊乱、静脉营养支持，无明显输血指征，暂不手术，答案为CDEF。",
+        },
+        {
+          id: 95,
+          text: "结合患者病史，考虑引起该患者急性胃扩张的原因是",
+          options: [
+            "A. 外科手术",
+            "B. 麻醉",
+            "C. 胃运动功能失调",
+            "D. 糖尿病",
+            "E. 短时间进食过多",
+            "F. 外伤",
+          ],
+          answer: ["A", "B", "C", "D", "E", "F"],
+          type: "multiple",
+          sharedGroup: "90-95",
+          reason:
+            "解析：外科手术、麻醉、胃运动功能失调、糖尿病、短时间进食过多、外伤等都可能是急性胃扩张原因，答案为ABCDEF。",
+        },
+        {
+          id: 96,
+          text: "(96~100 题共用题干: 患者女性，42 岁，既往健康，近二个月出现巩膜、皮肤黄染，呈进行性加重，无腹痛，略消瘦，体检见：肝肋下可触及，右上腹扪及肿大的胆囊，无触痛，无发热。) 根据哪个临床表现可排除因结石造成梗阻的可能性",
+          options: [
+            "A. 无发热",
+            "B. 无腹痛",
+            "C. 既往健康",
+            "D. 扪及肿大胆囊、无触痛",
+            "E. 巩膜、皮肤黄染且呈进行性加重",
+            "F. 高热",
+          ],
+          answer: ["D"],
+          type: "multiple",
+          sharedGroup: "96-100",
+          reason:
+            "解析：一般来说，当胆囊结石的患者出现梗阻的症状时患者主要出现右上腹部疼痛，疼痛是比较剧烈的，可以是持续性的绞痛或者是持续性的胀痛。除了疼痛之外患者还会出现腹胀，发热，黄痘等临床症状。",
+        },
+        {
+          id: 97,
+          text: "为明确黄疸性质，最有意义的检查是",
+          options: [
+            "A. ERCP",
+            "B. CT 检查",
+            "C. B 超检查",
+            "D. MRI 检查",
+            "E. 肝功能检查",
+            "F. X 线平片",
+          ],
+          answer: ["E"],
+          type: "multiple",
+          sharedGroup: "96-100",
+          reason:
+            "解析：一般根据血清胆红素、胆汁酸、转氨酶、碱性磷酸酶、γ谷氨酰移换酶等试验，可鉴别各类型的黄疸。实际应用时，可按以下程序：1、证实黄疸的存在：皮肤、粘膜黄染除由于黄疸外，尚可由于色素或药物染色，例如摄入过量胡萝卜素（胡萝卜、柑桔、木瓜、南瓜等）或大剂量阿的可引起皮肤、粘膜黄染，临床上称之为假性黄疸。测定血清胆红素可预以鉴别，假性黄疸时血清胆红素正常。2、分清是哪一种类型高胆红素血症：即非结合胆红素升高血症抑或结合胆红素升高血症，测定血清直接胆红素可达此目的。非结合胆红素升高血症时，血清总胆红素升高（一般不超过85μmol/L），直接胆红素在总胆红素中所占比例低于25%，而结合胆红素升高血症时直接胆红素所占比例超过40%。",
+        },
+        {
+          id: 98,
+          text: "如黄疸性质为梗阻性，欲明确梗阻部位，选择下列哪项检查手段为最优",
+          options: [
+            "A. B 超",
+            "B. ERCP",
+            "C. CT 检查",
+            "D. 十二指肠低张造影",
+            "E. MRI 检查",
+            "F. EUS（超声内镜）",
+          ],
+          answer: ["A"],
+          type: "multiple",
+          sharedGroup: "96-100",
+          reason:
+            "解析：超声检查是胆管癌的首选影像学检查，肝内胆管癌可能仅表现为肝内局限性肿块，肝门部肿瘤则有肝内胆管扩张，而肝外肝管不扩张。超声检查可以显示胆管内及胆管周围的病变，评价门静脉受侵程度。在超声引导下还可以做经皮肝穿刺胆管造影（PCT）检查，穿刺抽取胆汁，行CA19-9、CEA、胆汁细胞学检查和直接穿刺肿瘤活检。",
+        },
+        {
+          id: 99,
+          text: "B 超显示肝内外胆管扩张，则梗阻部位可能在",
+          options: [
+            "A. 第一肝门处",
+            "B. 第二肝门处",
+            "C. 胆总管下端",
+            "D. Vater 壶腹周围",
+            "E. 肝总管与胆囊管汇合处",
+            "F. 胆囊颈部",
+          ],
+          answer: ["C", "D"],
+          type: "multiple",
+          sharedGroup: "96-100",
+          reason:
+            "解析：若B超显示肝内外胆管扩张，则梗阻部位在胆道系统的最远端。",
+        },
+        {
+          id: 100,
+          text: "术中发现胰头部一轮廓不规则肿物，边界尚清，与周围组织无粘连，门静脉、肠系膜上静脉均完整，无破坏，宜行",
+          options: [
+            "A. 扩大切除术",
+            "B. 全胰切除术",
+            "C. 胆囊十二指肠吻合术",
+            "D. 胆总管十二指肠吻合术",
+            "E. Whipple 胰头十二指肠切除术",
+            "F. T 管引",
+          ],
+          answer: ["E"],
+          type: "multiple",
+          sharedGroup: "96-100",
+          reason:
+            "解析：手术切除是胰头癌的有效治疗方法。尚无远处转移的胰头癌，均应争取手术切除以延长生存时间和改善生存质量。常用的手术方式：①胰头十二指肠切除术；②保留幽门的胰头十二指肠切除术；③姑息手术（胆肠吻合术、胃空肠吻合术、化学性内脏神经切断术、腹腔神经结节切除术）。患者一般条件尚可，可行胰头十二指肠切除术或保留幽门的胰头十二指肠切除术。",
+        },
+      ];
+
+      let currentIdx = 0;
+      let userAnswers = {}; // { questionId: value }
+      let isSubmitted = false;
+
+      const questionArea = document.getElementById("questionArea");
+      const questionNum = document.getElementById("questionNum");
+      const questionText = document.getElementById("questionText");
+      const optionsList = document.getElementById("optionsList");
+      const navSections = document.getElementById("navSections");
+      const answeredCountSpan = document.getElementById("answeredCount");
+      const totalCountSpan = document.getElementById("totalCount");
+      const progressBar = document.getElementById("progressBar");
+      const progressText = document.getElementById("progressText");
+      const resultBox = document.getElementById("resultBox");
+      const correctAnswerDiv = document.getElementById("correctAnswer");
+      const reasonTextDiv = document.getElementById("reasonText");
+
+      // 初始化页面
+      totalCountSpan.textContent = `总题数 ${questions.length}`;
+      initSidebar();
+      renderQuestion();
+      updateStatus();
+
+      function initSidebar() {
+        // Group questions by type
+        const types = {
+          single: "单选题",
+          multiple: "多选题",
+        };
+
+        navSections.innerHTML = "";
+
+        Object.keys(types).forEach((type) => {
+          const typeQuestions = questions.filter((q) => q.type === type);
+          if (typeQuestions.length === 0) return;
+
+          const section = document.createElement("div");
+          section.className = "nav-section-wrapper";
+
+          const title = document.createElement("div");
+          title.className = "section-title";
+          title.innerHTML = `<span>${types[type]}</span> <span>︾</span>`;
+          section.appendChild(title);
+
+          const grid = document.createElement("div");
+          grid.className = "nav-grid";
+
+          typeQuestions.forEach((q) => {
+            const item = document.createElement("div");
+            item.className = "nav-item";
+            item.id = `nav-item-${q.id}`;
+            item.textContent = q.id;
+            item.onclick = () => {
+              currentIdx = questions.findIndex((item) => item.id === q.id);
+              renderQuestion();
+            };
+            grid.appendChild(item);
+          });
+
+          section.appendChild(grid);
+          navSections.appendChild(section);
+        });
+      }
+
+      function renderQuestion() {
+        const q = questions[currentIdx];
+        questionNum.textContent = `第${q.id}题`;
+
+        let sharedGroupBadge = "";
+        if (q.sharedGroup) {
+          sharedGroupBadge = `<span style="background-color: #ff8c42; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; margin-left: 8px;">${q.sharedGroup.replace(/-/g, "~")}题组</span>`;
+        }
+        questionNum.innerHTML = `第${q.id}题 ${sharedGroupBadge}`;
+
+        questionText.textContent = q.text;
+        optionsList.innerHTML = "";
+
+        q.options.forEach((opt) => {
+          const key = opt.substring(0, 1);
+          const li = document.createElement("li");
+          li.className = "option-item";
+
+          const input = document.createElement("input");
+          input.type = q.type === "multiple" ? "checkbox" : "radio";
+          input.name = "option";
+          input.className = "option-input";
+          input.value = key;
+
+          // Check if already answered
+          if (q.type === "multiple") {
+            if (userAnswers[q.id] && userAnswers[q.id].includes(key)) {
+              input.checked = true;
+              li.classList.add("selected");
+            }
+          } else {
+            if (userAnswers[q.id] === key) {
+              input.checked = true;
+              li.classList.add("selected");
+            }
+          }
+
+          if (isSubmitted) input.disabled = true;
+
+          input.onchange = () => {
+            handleAnswer(q.id, key, q.type);
+            updateStatus();
+            renderSidebarStatus();
+          };
+
+          li.onclick = (e) => {
+            if (isSubmitted) return;
+            if (e.target !== input) {
+              input.checked = q.type === "multiple" ? !input.checked : true;
+              handleAnswer(q.id, key, q.type);
+              updateStatus();
+              renderSidebarStatus();
+            }
+          };
+
+          const label = document.createElement("span");
+          label.className = "option-label";
+          label.textContent = opt;
+
+          li.appendChild(input);
+          li.appendChild(label);
+          optionsList.appendChild(li);
+        });
+
+        renderSidebarStatus();
+        showResultIfSubmitted();
+      }
+
+      function handleAnswer(qId, val, type) {
+        if (type === "multiple") {
+          if (!userAnswers[qId]) userAnswers[qId] = [];
+          const idx = userAnswers[qId].indexOf(val);
+          if (idx > -1) {
+            userAnswers[qId].splice(idx, 1);
+          } else {
+            userAnswers[qId].push(val);
+          }
+          if (userAnswers[qId].length === 0) delete userAnswers[qId];
+          else userAnswers[qId].sort();
+        } else {
+          userAnswers[qId] = val;
+        }
+
+        // Update selected class in UI
+        const items = optionsList.querySelectorAll(".option-item");
+        items.forEach((item) => {
+          const input = item.querySelector("input");
+          if (input.checked) item.classList.add("selected");
+          else item.classList.remove("selected");
+        });
+      }
+
+      function renderSidebarStatus() {
+        const navItems = document.querySelectorAll(".nav-item");
+        navItems.forEach((item) => {
+          const id = parseInt(item.textContent);
+          item.classList.remove("current", "answered", "wrong");
+
+          if (id === questions[currentIdx].id) {
+            item.classList.add("current");
+          } else if (userAnswers[id]) {
+            item.classList.add("answered");
+          }
+
+          if (isSubmitted) {
+            const q = questions.find((q) => q.id === id);
+            const userAns = userAnswers[id];
+            const correctAns = q.answer;
+
+            let isCorrect = false;
+            if (q.type === "multiple") {
+              isCorrect =
+                Array.isArray(userAns) &&
+                userAns.length === correctAns.length &&
+                userAns.every((v, i) => v === correctAns[i]);
+            } else {
+              isCorrect = userAns === correctAns;
+            }
+
+            if (!isCorrect) {
+              item.classList.add("wrong");
+            }
+          }
+        });
+      }
+
+      function updateStatus() {
+        const answeredCount = Object.keys(userAnswers).length;
+        answeredCountSpan.textContent = `已答 ${answeredCount} 题`;
+        const progress = Math.round((answeredCount / questions.length) * 100);
+        progressBar.style.width = `${progress}%`;
+        progressText.textContent = `${progress}%`;
+      }
+
+      function showResultIfSubmitted() {
+        if (!isSubmitted) {
+          resultBox.classList.remove("show");
+          return;
+        }
+
+        const q = questions[currentIdx];
+        const userAns = userAnswers[q.id];
+        const correctAns = q.answer;
+
+        let isCorrect = false;
+        if (q.type === "multiple") {
+          isCorrect =
+            Array.isArray(userAns) &&
+            userAns.length === correctAns.length &&
+            userAns.every((v, i) => v === correctAns[i]);
+        } else {
+          isCorrect = userAns === correctAns;
+        }
+
+        resultBox.className = `result-box show ${isCorrect ? "correct" : "wrong"}`;
+        correctAnswerDiv.innerHTML = `<strong>正确答案：</strong> ${Array.isArray(correctAns) ? correctAns.join("") : correctAns}`;
+        reasonTextDiv.textContent = q.reason;
+      }
+
+      document.getElementById("prevBtn").onclick = () => {
+        if (currentIdx > 0) {
+          currentIdx--;
+          renderQuestion();
+        }
+      };
+
+      document.getElementById("nextBtn").onclick = () => {
+        if (currentIdx < questions.length - 1) {
+          currentIdx++;
+          renderQuestion();
+        }
+      };
+
+      document.getElementById("submitBtn").onclick = () => {
+        if (isSubmitted) return;
+        if (!confirm("确定要交卷吗？交卷后不可更改答案。")) return;
+
+        isSubmitted = true;
+        let score = 0;
+        questions.forEach((q) => {
+          const userAns = userAnswers[q.id];
+          const correctAns = q.answer;
+          let isCorrect = false;
+          if (q.type === "multiple") {
+            isCorrect =
+              Array.isArray(userAns) &&
+              userAns.length === correctAns.length &&
+              userAns.every((v, i) => v === correctAns[i]);
+          } else {
+            isCorrect = userAns === correctAns;
+          }
+          if (isCorrect) score++;
+        });
+
+        document.getElementById("finalScore").textContent = score;
+        document.getElementById("scoreModal").style.display = "flex";
+        document.getElementById("submitBtn").disabled = true;
+        renderQuestion(); // To update disabled inputs and results
+      };
+
+      function closeModal() {
+        document.getElementById("scoreModal").style.display = "none";
+      }
+
+      // Timer logic
+      let secondsLeft = 90 * 60;
+      const timeLeftSpan = document.getElementById("timeLeft");
+      const timer = setInterval(() => {
+        if (isSubmitted) {
+          clearInterval(timer);
+          return;
+        }
+        secondsLeft--;
+        const mins = Math.floor(secondsLeft / 60);
+        const secs = secondsLeft % 60;
+        timeLeftSpan.textContent = `剩余时间：${mins} 分钟 ${secs} 秒`;
+        if (secondsLeft <= 0) {
+          clearInterval(timer);
+          alert("时间到，系统已自动交卷。");
+          document.getElementById("submitBtn").click();
+        }
+      }, 1000);
+
+      // Keyboard navigation
+      window.onkeydown = (e) => {
+        if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
+        if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
+      };
+
+      // Calculator logic
+      let calcExpr = "";
+      const calcDisplay = document.getElementById("calcDisplay");
+
+      function toggleCalc() {
+        const modal = document.getElementById("calcModal");
+        modal.style.display = modal.style.display === "flex" ? "none" : "flex";
+        if (modal.style.display === "none") calcClear();
+      }
+
+      function calcInput(val) {
+        if (calcExpr === "0" && val !== ".") calcExpr = "";
+        calcExpr += val;
+        calcDisplay.textContent = calcExpr || "0";
+      }
+
+      function calcClear() {
+        calcExpr = "";
+        calcDisplay.textContent = "0";
+      }
+
+      function calcEqual() {
+        try {
+          // 使用 Function 构造函数安全地计算表达式结果
+          const result = new Function(`return ${calcExpr}`)();
+          calcExpr = String(result);
+          calcDisplay.textContent = calcExpr;
+        } catch (e) {
+          calcDisplay.textContent = "Error";
+          calcExpr = "";
+        }
+      }
+    </script>
+  </body>
+</html>
