@@ -1,0 +1,1 @@
+import{a as s}from"./MapView.vue_vue_type_style_index_1_lang-BE73i-0P.js";import{d as r,o as a,c as t,n as o,u as n,r as c}from"./index-O6KxbQS_.js";const d=r({__name:"CardDescription",setup(m){return(e,l)=>(a(),t("p",{class:o(n(s)("text-sm text-muted-foreground/80",e.$attrs.class??""))},[c(e.$slots,"default")],2))}});export{d as _};

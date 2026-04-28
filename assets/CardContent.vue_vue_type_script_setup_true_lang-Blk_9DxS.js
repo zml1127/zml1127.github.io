@@ -1,0 +1,1 @@
+import{a}from"./MapView.vue_vue_type_style_index_1_lang-BE73i-0P.js";import{d as e,o as r,c as n,n as o,u as t,r as c}from"./index-O6KxbQS_.js";const d=e({__name:"CardContent",setup(l){return(s,p)=>(r(),n("div",{class:o(t(a)("p-6 pt-0",s.$attrs.class??""))},[c(s.$slots,"default")],2))}});export{d as _};
