@@ -207,26 +207,24 @@ function globalSearch() {
     
     let html = '';
     
-    // 添加柜子结果
     if (cabinets.length > 0) {
         html += '<div style="padding: 8px 20px; color: #667eea; font-weight: bold; background: #f8f9fa;">📦 柜子</div>';
         cabinets.forEach(cabinet => {
             const itemCount = ItemManager.getByCabinet(cabinet.id).length;
             html += '<div class="result-item" onclick="goToCabinet(' + cabinet.id + ')">' +
                 '<span>📦 ' + highlightText(cabinet.name, keyword) + '</span>' +
-                '<span class="result-type">位置: ' + cabinet.location + ' | ' + itemCount + '个物品</span>' +
+                '<span class="result-type">位置: ' + (cabinet.location || '-') + ' | ' + itemCount + '个物品</span>' +
             '</div>';
         });
     }
     
-    // 添加物品结果
     if (items.length > 0) {
         html += '<div style="padding: 8px 20px; color: #764ba2; font-weight: bold; background: #f8f9fa;">📦 物品</div>';
         items.forEach(item => {
             const cabinet = CabinetManager.getById(item.cabinetId);
             html += '<div class="result-item" onclick="goToItem(' + item.cabinetId + ')">' +
                 '<span>📦 ' + highlightText(item.name, keyword) + '</span>' +
-                '<span class="result-type">在: ' + (cabinet ? cabinet.name : '未知柜子') + '</span>' +
+                '<span class="result-type">在: ' + (cabinet ? cabinet.name : '-') + '</span>' +
             '</div>';
         });
     }
@@ -244,9 +242,6 @@ function goToCabinet(cabinetId) {
     document.getElementById('globalSearch').value = '';
     document.getElementById('globalSearchResults').classList.remove('active');
     switchTab('cabinet');
-    setTimeout(() => {
-        filterCabinets();
-    }, 100);
 }
 
 // 跳转到物品
@@ -272,6 +267,14 @@ document.addEventListener('click', function(e) {
         if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
             navLinks.classList.remove('active');
         }
+    }
+});
+
+// 点击其他地方关闭模态框
+document.addEventListener('click', function(e) {
+    const modal = document.getElementById('editCabinetModal');
+    if (modal && e.target === modal) {
+        closeEditCabinetModal();
     }
 });
 
@@ -324,8 +327,6 @@ function switchTab(tabName) {
     });
 
     document.getElementById(tabName + 'Tab').classList.add('active');
-
-    // 关闭移动端导航菜单
     document.getElementById('navLinks').classList.remove('active');
 
     if (tabName === 'dashboard') {
@@ -346,39 +347,59 @@ function switchTab(tabName) {
     event.preventDefault();
 }
 
+// 打开编辑柜子模态框
+function openEditCabinetModal(cabinetId) {
+    const cabinet = CabinetManager.getById(cabinetId);
+    if (!cabinet) return;
+    
+    document.getElementById('editCabinetId').value = cabinet.id;
+    document.getElementById('editCabinetName').value = cabinet.name;
+    document.getElementById('editCabinetLocation').value = cabinet.location;
+    document.getElementById('editCabinetModal').classList.add('active');
+}
+
+// 关闭编辑柜子模态框
+function closeEditCabinetModal() {
+    document.getElementById('editCabinetModal').classList.remove('active');
+    document.getElementById('editCabinetForm').reset();
+}
+
 // UI渲染
 const UI = {
     renderCabinets(filteredCabinets) {
-        const cabinets = filteredCabinets !== null ? filteredCabinets : CabinetManager.getAll();
+        const cabinets = filteredCabinets ? filteredCabinets : CabinetManager.getAll();
         const container = document.getElementById('cabinetList');
         const countBadge = document.getElementById('cabinetCount');
         
         countBadge.textContent = cabinets.length;
         
         if (cabinets.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>暂无柜子，请先创建柜子</p></div>';
+            container.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 30px;">暂无柜子数据</td></tr>';
             return;
         }
         
         const searchKeyword = document.getElementById('cabinetSearch') ? document.getElementById('cabinetSearch').value : '';
         
-        container.innerHTML = cabinets.map(cabinet => {
+        container.innerHTML = cabinets.map((cabinet, index) => {
             const itemCount = ItemManager.getByCabinet(cabinet.id).length;
+            const createdDate = new Date(cabinet.createdAt).toLocaleDateString('zh-CN');
             
-            return '<div class="item-card">' +
-                '<div class="item-icon">📦</div>' +
-                '<div class="item-info">' +
-                    '<h4>' + highlightText(cabinet.name, searchKeyword) + '</h4>' +
-                    '<p>位置：<span class="badge badge-location">' + cabinet.location + '</span></p>' +
-                    '<p>包含 <span class="badge">' + itemCount + '</span> 个物品</p>' +
-                '</div>' +
-                '<button class="delete-btn" onclick="deleteCabinet(' + cabinet.id + ')">删除</button>' +
-            '</div>';
+            return '<tr>' +
+                '<td>' + (index + 1) + '</td>' +
+                '<td>' + highlightText(cabinet.name, searchKeyword) + '</td>' +
+                '<td><span class="badge badge-location">' + (cabinet.location || '-') + '</span></td>' +
+                '<td><span class="badge">' + itemCount + '</span></td>' +
+                '<td>' + createdDate + '</td>' +
+                '<td>' +
+                    '<button class="edit-btn" onclick="openEditCabinetModal(' + cabinet.id + ')">编辑</button>' +
+                    '<button class="delete-btn" onclick="deleteCabinet(' + cabinet.id + ')">删除</button>' +
+                '</td>' +
+            '</tr>';
         }).join('');
     },
     
     renderItems(filteredItems) {
-        const items = filteredItems !== null ? filteredItems : ItemManager.getAll();
+        const items = filteredItems ? filteredItems : ItemManager.getAll();
         const cabinets = CabinetManager.getAll();
         const container = document.getElementById('itemList');
         const countBadge = document.getElementById('itemCount');
@@ -386,24 +407,24 @@ const UI = {
         countBadge.textContent = items.length;
         
         if (items.length === 0) {
-            container.innerHTML = '<div class="empty-state"><div class="icon">📦</div><p>暂无物品，请先添加物品</p></div>';
+            container.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #999; padding: 30px;">暂无物品数据</td></tr>';
             return;
         }
         
         const searchKeyword = document.getElementById('itemSearch') ? document.getElementById('itemSearch').value : '';
         
-        container.innerHTML = items.map(item => {
+        container.innerHTML = items.map((item, index) => {
             const cabinet = cabinets.find(c => c.id === item.cabinetId);
+            const createdDate = new Date(item.createdAt).toLocaleDateString('zh-CN');
             
-            return '<div class="item-card">' +
-                '<div class="item-icon">📦</div>' +
-                '<div class="item-info">' +
-                    '<h4>' + highlightText(item.name, searchKeyword) + '</h4>' +
-                    '<p>放置于 <span class="badge badge-cabinet">' + (cabinet ? cabinet.name : '未知柜子') + '</span></p>' +
-                    '<p>位置：<span class="badge badge-location">' + (cabinet ? cabinet.location : '-') + '</span></p>' +
-                '</div>' +
-                '<button class="delete-btn" onclick="deleteItem(' + item.id + ')">删除</button>' +
-            '</div>';
+            return '<tr>' +
+                '<td>' + (index + 1) + '</td>' +
+                '<td>' + highlightText(item.name, searchKeyword) + '</td>' +
+                '<td><span class="badge badge-cabinet">' + (cabinet ? cabinet.name : '-') + '</span></td>' +
+                '<td><span class="badge badge-location">' + (cabinet ? cabinet.location : '-') + '</span></td>' +
+                '<td>' + createdDate + '</td>' +
+                '<td><button class="delete-btn" onclick="deleteItem(' + item.id + ')">删除</button></td>' +
+            '</tr>';
         }).join('');
     },
     
@@ -413,7 +434,7 @@ const UI = {
         
         select.innerHTML = '<option value="">请选择柜子</option>' + 
             cabinets.map(cabinet => 
-                '<option value="' + cabinet.id + '">' + cabinet.name + '（' + cabinet.location + '）</option>'
+                '<option value="' + cabinet.id + '">' + cabinet.name + '（' + (cabinet.location || '-') + '）</option>'
             ).join('');
     },
     
@@ -436,7 +457,7 @@ const UI = {
                 const count = ItemManager.getByCabinet(cabinet.id).length;
                 const percentage = totalItems > 0 ? ((count / totalItems) * 100).toFixed(0) : 0;
                 return '<div class="detail-item">' +
-                    '<span>' + cabinet.name + ' <small>(' + cabinet.location + ')</small></span>' +
+                    '<span>' + cabinet.name + ' <small>(' + (cabinet.location || '-') + ')</small></span>' +
                     '<span><span class="badge">' + count + '</span> (' + percentage + '%)</span>' +
                 '</div>';
             }).join('');
@@ -503,6 +524,9 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         document.getElementById('mainPage').style.display = 'block';
         document.getElementById('errorMsg').style.display = 'none';
         UI.render();
+        UI.renderCabinets();
+        UI.renderItems();
+        UI.updateCabinetSelect();
     } else {
         document.getElementById('errorMsg').style.display = 'block';
     }
@@ -533,6 +557,31 @@ document.getElementById('cabinetForm').addEventListener('submit', function(e) {
     
     toggleCabinetForm();
     UI.renderCabinets();
+    UI.renderDashboard();
+});
+
+// 编辑柜子表单提交
+document.getElementById('editCabinetForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('editCabinetId').value;
+    const name = document.getElementById('editCabinetName').value.trim();
+    const location = document.getElementById('editCabinetLocation').value;
+    
+    if (!name) {
+        alert('请输入柜子名称');
+        return;
+    }
+    
+    if (!location) {
+        alert('请选择柜子位置');
+        return;
+    }
+    
+    CabinetManager.update(parseInt(id), name, location);
+    closeEditCabinetModal();
+    UI.renderCabinets();
+    UI.updateCabinetSelect();
+    UI.renderItems();
     UI.renderDashboard();
 });
 
@@ -569,6 +618,8 @@ function deleteCabinet(id) {
     if (confirm('确定要删除这个柜子吗？柜子内的物品也会被删除')) {
         CabinetManager.delete(id);
         UI.renderCabinets();
+        UI.updateCabinetSelect();
+        UI.renderItems();
         UI.renderDashboard();
     }
 }

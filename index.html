@@ -62,12 +62,12 @@
                     </div>
                     
                     <div class="stats-grid">
-                        <div class="stat-card">
+                        <div class="stat-card clickable" onclick="switchTab('cabinet')">
                             <div class="icon">📦</div>
                             <div class="number" id="totalCabinets">0</div>
                             <div class="label">柜子总数</div>
                         </div>
-                        <div class="stat-card">
+                        <div class="stat-card clickable" onclick="switchTab('item')">
                             <div class="icon">📦</div>
                             <div class="number" id="totalItems">0</div>
                             <div class="label">物品总数</div>
@@ -158,7 +158,52 @@
                         </div>
 
                         <div class="list-section">
-                            <div id="cabinetList"></div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>柜子名称</th>
+                                        <th>位置（类别）</th>
+                                        <th>物品数量</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cabinetList"></tbody>
+                            </table>
+                        </div>
+
+                        <!-- 编辑柜子模态框 -->
+                        <div id="editCabinetModal" class="modal">
+                            <div class="modal-content" style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%;">
+                                <span class="modal-close" onclick="closeEditCabinetModal()">&times;</span>
+                                <h3 style="margin-bottom: 20px;">编辑柜子</h3>
+                                <form id="editCabinetForm">
+                                    <input type="hidden" id="editCabinetId">
+                                    <div class="form-group">
+                                        <label for="editCabinetName">柜子名称</label>
+                                        <input type="text" id="editCabinetName" placeholder="请输入柜子名称" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editCabinetLocation">柜子位置（类别）</label>
+                                        <select id="editCabinetLocation" required>
+                                            <option value="">请选择位置</option>
+                                            <option value="客厅">客厅</option>
+                                            <option value="卧室">卧室</option>
+                                            <option value="厨房">厨房</option>
+                                            <option value="书房">书房</option>
+                                            <option value="阳台">阳台</option>
+                                            <option value="卫生间">卫生间</option>
+                                            <option value="储物间">储物间</option>
+                                            <option value="其他">其他</option>
+                                        </select>
+                                    </div>
+                                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                                        <button type="submit" class="btn">保存修改</button>
+                                        <button type="button" class="btn" style="background: #666;" onclick="closeEditCabinetModal()">取消</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -210,7 +255,19 @@
                         </div>
 
                         <div class="list-section">
-                            <div id="itemList"></div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>物品名称</th>
+                                        <th>所属柜子</th>
+                                        <th>柜子位置</th>
+                                        <th>创建时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemList"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

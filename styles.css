@@ -282,6 +282,16 @@ body {
     font-size: 1rem;
 }
 
+.stat-card.clickable {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card.clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+}
+
 /* 搜索栏 */
 .search-bar {
     background: white;
@@ -420,10 +430,25 @@ body {
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
+    margin-left: 5px;
 }
 
 .delete-btn:hover {
     background: #ff3344;
+}
+
+.edit-btn {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.edit-btn:hover {
+    background: #5568d3;
 }
 
 .empty-state {
@@ -641,4 +666,52 @@ body {
 
 .stat-card, .panel, .detail-panel {
     animation: fadeIn 0.5s ease;
+}
+
+/* 表格样式 */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+.data-table th,
+.data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.data-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+}
+
+.data-table tr:hover {
+    background: #f8f9fa;
+}
+
+.data-table .delete-btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+.list-section {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.list-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.list-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.list-section::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
 }
